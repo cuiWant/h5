@@ -14,11 +14,12 @@ export default {
 	name: 'App',
 	components: {
 		Header,
-		Form
+		Form,
 	},
 	mounted() {
+		//测试账号注销  注销状态
 		console.log(this.$refs.header, 'sss');
-	}
+	},
 };
 </script>
 
