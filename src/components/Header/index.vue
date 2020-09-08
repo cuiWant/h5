@@ -1,6 +1,6 @@
 <template>
 	<header class="header">
-		<van-nav-bar :title="title" left-arrow right-text="完成">
+		<van-nav-bar :title="title" @click-left="leftClick" @click-right="rightClick" left-arrow :right-text="rightText">
 			<!-- <template #right> </template> -->
 		</van-nav-bar>
 		<!-- <slot name="left"></slot>
@@ -19,12 +19,17 @@ export default {
 		title: String,
 		leftClick: Function,
 		rightClick: Function,
+		rightText: String,
 	},
 	data() {
 		return {
 			ss: 1,
 		};
 	},
+	mounted() {
+		console.log(this);
+	},
+	methods: {},
 };
 </script>
 

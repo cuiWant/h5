@@ -11,7 +11,6 @@ import Form from '@/components/Form';
 export default {
 	name: 'App',
 	components: {
-		Header,
 		Form,
 	},
 	mounted() {
