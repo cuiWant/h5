@@ -16,13 +16,15 @@ export default {
 	name: 'Header',
 	// 声明接收属性
 	props: {
-		title: String
+		title: String,
+		leftClick: Function,
+		rightClick: Function,
 	},
-	data(){
+	data() {
 		return {
-			ss:1
-		}
-	}
+			ss: 1,
+		};
+	},
 };
 </script>
 
