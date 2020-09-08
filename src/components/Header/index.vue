@@ -1,6 +1,6 @@
 <template>
 	<header class="header">
-		<van-nav-bar :title="title" left-arrow right-text="完成">
+		<van-nav-bar @click-left="onClickLeft" :title="title" left-arrow :right-text="rightContent">
 			<!-- <template #right> </template> -->
 		</van-nav-bar>
 		<!-- <slot name="left"></slot>
@@ -20,8 +20,13 @@ export default {
 	},
 	data(){
 		return {
-			ss:1
+			rightContent:"完成"
 		}
+	},
+	methods:{
+		onClickLeft(){
+			this.$router.go(-1)
+		},
 	}
 };
 </script>
