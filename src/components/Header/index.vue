@@ -16,9 +16,11 @@ export default {
 	name: 'Header',
 	// 声明接收属性
 	props: {
-		title: String
+		title: String,
+		leftClick: Function,
+		rightClick: Function,
 	},
-	data(){
+	data() {
 		return {
 			rightContent:"完成"
 		}

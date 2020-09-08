@@ -1,13 +1,11 @@
 <template>
 	<div id="app">
-		<Header ref="header" :title="'预约会议'"></Header>
 		<router-view></router-view>
 		<!-- <Form ref= "header"> </Form>	 -->
 	</div>
 </template>
 
 <script>
-import Header from '@/components/Header';
 import Form from '@/components/Form';
 
 export default {

@@ -1,10 +1,12 @@
 import Home from '@/pages/Home';
 import AddContant from '../pages/addContact';
 import InfoRemind from '../pages/infoRemind'
+
+const User = () => import('@/pages/User');
 export default [
 	{
 		path: '/',
-		redirect: '/home'
+		redirect: '/home',
 	},
 	{
 		path: '/home',
@@ -24,5 +26,9 @@ export default [
 	{
 		path:'/infoRemind',
 		component:InfoRemind,
+	},
+	{
+		path: '/user',
+		component: User,
 	},
 ];
