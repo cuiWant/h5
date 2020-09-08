@@ -19,17 +19,17 @@ export default {
 		title: String,
 		leftClick: Function,
 		rightClick: Function,
-		rightText: String,
 	},
 	data() {
 		return {
-			ss: 1,
-		};
+			rightContent:"完成"
+		}
 	},
-	mounted() {
-		console.log(this);
-	},
-	methods: {},
+	methods:{
+		onClickLeft(){
+			this.$router.go(-1)
+		},
+	}
 };
 </script>
 
