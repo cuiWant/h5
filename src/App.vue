@@ -7,7 +7,7 @@
 
 <script>
 import Form from '@/components/Form';
-
+import Header from '@/components/Header';
 export default {
 	name: 'App',
 	components: {
