@@ -7,6 +7,8 @@ import App from './App.vue';
 import router from './router';
 import loading from '@/components/Loading';
 import 'vant/lib/index.css';
+
+import './_globalComponent.js';
 Vue.use(Vant);
 Vue.use(Toast);
 Vue.prototype.$moment = moment;

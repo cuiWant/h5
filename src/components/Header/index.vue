@@ -1,6 +1,6 @@
 <template>
 	<header class="header">
-		<van-nav-bar @click-left="onClickLeft" :title="title" left-arrow :right-text="rightContent">
+		<van-nav-bar :title="title" @click-left="leftClick" @click-right="rightClick" left-arrow :right-text="rightText">
 			<!-- <template #right> </template> -->
 		</van-nav-bar>
 		<!-- <slot name="left"></slot>

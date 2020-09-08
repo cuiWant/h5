@@ -9,11 +9,23 @@
 				<div class="time">
 					<div class="time-top">{{ timeConfig.start.date }} {{ timeConfig.start.time }}</div>
 					<div class="time-bottom">{{ timeConfig.start.week }}</div>
+	<!-- <div id="wrapper">
+		<Header ref="header" :leftClick="headerLeft" :rightClick="headerRight" :title="'预约会议'" rightText="完成"></Header>
+		<div ref="wrapper" class="content-wrapper">
+			<div class="home">
+				<div class="text-area">
+					<van-field v-model="message" rows="1" autosize type="textarea" placeholder="请输入留言" /> -->
 				</div>
-				<div class="middle-line">/</div>
-				<div class="time">
-					<div class="time-top">{{ timeConfig.start.date }} {{ timeConfig.start.time }}</div>
-					<div class="time-bottom">{{ timeConfig.start.week }}</div>
+				<div class="date-select" @click="dateShow" @touchstart.prevent="dateShow">
+					<div class="time">
+						<div class="time-top">{{ timeConfig.start.date }} {{ timeConfig.start.time }}</div>
+						<div class="time-bottom">{{ timeConfig.start.week }}</div>
+					</div>
+					<div class="middle-line">/</div>
+					<div class="time">
+						<div class="time-top">{{ timeConfig.start.date }} {{ timeConfig.start.time }}</div>
+						<div class="time-bottom">{{ timeConfig.start.week }}</div>
+					</div>
 				</div>
 			</div>
 			<div class="userAndContacts">
@@ -66,6 +78,11 @@
 			</van-action-sheet>
 			<div class="test"></div>
 		</div>
+		<van-action-sheet v-model="show">
+			<div class="content">
+				<van-datetime-picker v-model="currentDate" @confirm="dateHandle" @cancel="dateHandle" type="datetime" :formatter="formatter" />
+			</div>
+		</van-action-sheet>
 	</div>
 </template>
 
