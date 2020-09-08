@@ -1,5 +1,6 @@
 <template>
 	<div id="wrapper" ref="wrapper">
+		<Header ref="header" :title="'预约会议'"></Header>
 		<div class="home">
 			<div class="text-area">
 				<van-field v-model="message" rows="1" autosize type="textarea" placeholder="请输入留言" />
@@ -26,6 +27,7 @@
 					<van-datetime-picker v-model="currentDate" @confirm="dateHandle" @cancel="dateHandle" type="datetime" :formatter="formatter" />
 				</div>
 			</van-action-sheet>
+			<div class="test"></div>
 		</div>
 	</div>
 </template>
@@ -42,14 +44,14 @@ export default {
 				start: {
 					time: '10:10',
 					date: '2月31号',
-					week: '周八'
+					week: '周八',
 				},
 				end: {
 					time: '10:10',
 					date: '2月31号',
-					week: '周八'
-				}
-			}
+					week: '周八',
+				},
+			},
 		};
 	},
 	mounted() {
@@ -90,8 +92,8 @@ export default {
 			}
 
 			return val;
-		}
-	}
+		},
+	},
 };
 </script>
 
@@ -101,7 +103,9 @@ export default {
 #wrapper
 	height 100%
 
-
+.test
+	height 10000px
+	background pink
 .home
 	font-family PingFangSC-Medium
 	background #f7f7f7
