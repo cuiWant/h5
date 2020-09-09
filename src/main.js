@@ -13,6 +13,7 @@ Vue.use(Vant);
 Vue.use(Toast);
 Vue.prototype.$moment = moment;
 Vue.prototype.$loading = loading;
+Vue.prototype.console = console;
 moment.locale('zh-cn');
 import 'lib-flexible';
 
