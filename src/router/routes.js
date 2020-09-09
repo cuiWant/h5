@@ -1,5 +1,7 @@
 import Home from '@/pages/Home';
 import AddContant from '../pages/addContact';
+import ComponaryBook from '../pages/addContact/componaryBook';
+import OutContact from '../pages/addContact/outContact';
 import InfoRemind from '../pages/infoRemind'
 
 const User = () => import('@/pages/User');
@@ -22,6 +24,13 @@ export default [
 	{
 		path:'/addContact',
 		component:AddContant,
+	},
+	{
+		path:'/addContact/outContact',
+		component:OutContact,
+	},{
+		path:'/addContact/componaryBook',
+		component:ComponaryBook,
 	},
 	{
 		path:'/infoRemind',

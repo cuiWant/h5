@@ -6,14 +6,14 @@
 		</div>
 		<div class="contactSettings">
 			<ul class="contactItems">
-				<li class="contactItem">
+				<li class="contactItem" @click="turnOutContact" @touchstart.prevent="turnOutContact">
 					<van-icon class="contacIcon" name="wap-home" />
-					<p class="contacText">会议室</p>
+					<p class="contacText">外部联系人</p>
 				</li>
 				<p class="contactLine" />
-				<li class="contactItem">
+				<li class="contactItem" @click="turnOutComponaryBook" @touchstart.prevent="turnOutComponaryBook">
 					<van-icon class="contacIcon" name="wap-home" />
-					<p class="contacText">会议室</p>
+					<p class="contacText">企业通讯录</p>
 				</li>
 			</ul>
 		</div>
@@ -77,6 +77,16 @@ export default {
 		},
 		checkAllItemsKey(a, b) {
 			console.log(a, b, this.checkeds);
+    },
+    headerLeft() {
+			this.$router.go(-1);
+		},
+		headerRight() {},
+		turnOutContact(){
+			this.$router.push({path:'/addContact/outContact'})
+		},
+		turnOutComponaryBook(){
+			this.$router.push({path:'/addContact/componaryBook'})
 		},
 		onSearch(val) {
 			Toast(val);
