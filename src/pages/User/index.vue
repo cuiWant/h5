@@ -1,20 +1,20 @@
 <template>
-	<div class="">
-		user
-		<button @touchstart.prevent="test">123</button>
-	</div>
+	<div class=""></div>
 </template>
 
 <script>
 import { Toast } from 'vant';
 export default {
 	data() {
-		return {};
+		return {
+			show: false,
+		};
 	},
 	mounted() {},
 
 	methods: {
 		test() {
+			this.show = !this.show;
 			// this.$loading.show();
 			// // this.$loading.show();
 			// setTimeout(() => {
