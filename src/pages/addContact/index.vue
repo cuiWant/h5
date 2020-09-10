@@ -1,6 +1,6 @@
 <template>
 	<div id="addContact">
-		<Header ref="header" :leftClick="headerLeft" :rightClick="headerRight" :title="'添加参会人'" :rightText="`确定(7)`"></Header>
+		<Header ref="header" :leftClick="headerLeft" :rightClick="headerRight" :title="'添加参会人'" :rightText="`确定(${entryNum})`"></Header>
 		<div class="headerSearch">
 			<van-search class="vant-search" v-model="value" shape="round" @input="onSearch" @search="onSearch" placeholder="请输入搜索关键词" />
 		</div>
@@ -54,6 +54,7 @@ export default {
 			checked: false,
 			checkeds: false,
 			selectUser: [],
+			entryNum:'0',
 			letterArr: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
 			dataArr: [
 				{
