@@ -45,29 +45,19 @@ export default {
         },
       ],
       userInfoArr:[
-        {
-          checkeds:true,
-          name:'总裁办'
-        },
-        {
-          checkeds:false,
-          name:'财务室'
-        },
-        {
-          checkeds:true,
-          name:'投资管理部'
-        },
-        {
-          checkeds:false,
-          name:'产品事业部'
-        },
       ],
     }
   },
   mounted(){
-    console.log(this.$route.query.key);
+    this.firstLoadingData()
   },
   methods:{
+    //数据请求
+    firstLoadingData(){
+      this.$http.getFun('/parameter/query').then(res=>{
+        this.userInfoArr = res.data
+    })
+    },
     //勾选任意项
     checkAllItemsKey(key){
       console.log(key);
