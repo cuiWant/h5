@@ -9,6 +9,7 @@ import './_globalComponent.js';
 import './_globalVueSet.js';
 
 import 'lib-flexible';
+require('./mock');
 
 Vue.config.productionTip = false;
 
