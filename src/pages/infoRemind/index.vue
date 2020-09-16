@@ -4,45 +4,11 @@
 
 		<div class="topContent">
 			<ul>
-				<li class="topKeyItem" @click="checkingItem('0')" @touchstart.prevent="checkingItem('0')">
-					<div class="topItem" :class="checkIndex === '0' ? 'makesure' : ''">
-						<p>5分钟前</p>
-						<van-icon name="success" v-if="checkIndex === '0'" />
-					</div>
-					<van-divider />
-				</li>
-				<li class="topKeyItem" @click="checkingItem('1')" @touchstart.prevent="checkingItem('1')">
-					<div class="topItem" :class="checkIndex === '1' ? 'makesure' : ''">
-						<p>15分钟前</p>
-						<van-icon name="success" v-if="checkIndex === '1'" />
-					</div>
-					<van-divider />
-				</li>
-				<li class="topKeyItem" @click="checkingItem('2')" @touchstart.prevent="checkingItem('2')">
-					<div class="topItem" :class="checkIndex === '2' ? 'makesure' : ''">
-						<p>25分钟前</p>
-						<van-icon name="success" v-if="checkIndex === '2'" />
-					</div>
-					<van-divider />
-				</li>
-				<li class="topKeyItem" @click="checkingItem('3')" @touchstart.prevent="checkingItem('3')">
-					<div class="topItem" :class="checkIndex === '3' ? 'makesure' : ''">
-						<p>35分钟前</p>
-						<van-icon name="success" v-if="checkIndex === '3'" />
-					</div>
-					<van-divider />
-				</li>
-				<li class="topKeyItem" @click="checkingItem('4')" @touchstart.prevent="checkingItem('4')">
-					<div class="topItem" :class="checkIndex === '4' ? 'makesure' : ''">
-						<p>45分钟前</p>
-						<van-icon name="success" v-if="checkIndex === '4'" />
-					</div>
-					<van-divider />
-				</li>
-				<li class="topKeyItem" @click="checkingItem('5')" @touchstart.prevent="checkingItem('5')">
-					<div class="topItem" :class="checkIndex === '5' ? 'makesure' : ''">
-						<p>55分钟前</p>
-						<van-icon name="success" v-if="checkIndex === '5'" />
+				
+				<li class="topKeyItem" v-for="(item,index) in  checkData" :key="index"  @click="checkingItem(index)" @touchstart.prevent="checkingItem(index)">
+					<div class="topItem" :class=" checkIndex === index ? 'makesure' : ''">
+						<p>{{item.text}}</p>
+						<van-icon name="success" v-if="checkIndex === index" />
 					</div>
 					<van-divider />
 				</li>
@@ -52,14 +18,8 @@
 			<p>提醒方式</p>
 			<div>
 				<ul>
-					<li class="btnItem" :class="checkNum === '0' ? 'btnNumClass' : ''" @click="checkingNum('0')" @touchstart.prevent="checkingNum('0')">
-						<span>站内信</span>
-					</li>
-					<li class="btnItem" :class="checkNum === '1' ? 'btnNumClass' : ''" @click="checkingNum('1')" @touchstart.prevent="checkingNum('1')">
-						<span>短信</span>
-					</li>
-					<li class="btnItem" :class="checkNum === '2' ? 'btnNumClass' : ''" @click="checkingNum('2')" @touchstart.prevent="checkingNum('2')">
-						<span>电话</span>
+					<li v-for="(item,index) in checkMessage" :key="index" class="btnItem" :class="checkNum === index ? 'btnNumClass' : ''" @click="checkingNum(index)" @touchstart.prevent="checkingNum(index)">
+						<span>{{item}}</span>
 					</li>
 				</ul>
 			</div>
@@ -71,8 +31,17 @@
 export default {
 	data() {
 		return {
-			checkIndex: '1',
-			checkNum: '1',
+			checkIndex: 0,
+			checkNum: 0,
+			checkData:[
+				{text:'5分钟前',value:5},
+				{text:'10分钟前',value:10},
+				{text:'15分钟前',value:15},
+				{text:'30分钟前',value:30},
+				{text:'1小时前',value:60},
+				{text:'1天前',value:1440}
+			],
+			checkMessage:['站内信','短信','电话']		
 		};
 	},
 	methods: {
@@ -85,7 +54,16 @@ export default {
 		headerLeft() {
 			this.$router.go(-1);
 		},
-		headerRight() {},
+		headerRight() {
+			let current = this.checkData[this.checkIndex];
+			let obj = {
+				reminders_time:current.value,
+				reminders:this.checkNum,
+				text:`${current.text},${this.checkMessage[this.checkNum]}`,
+				key:'remindersText'
+			}
+			this.$router.push({path:'/home',query:obj});
+		},
 	},
 };
 </script>

@@ -37,7 +37,7 @@
 				<div class="addWarnings" @click="touchInfoRemind" @touchstart.prevent="touchInfoRemind">
 					<van-icon class="addWarningsLeft" name="bulb-o" />
 					<div class="addWarningsRight">
-						<span class="addWarningsFont">15分钟前，站内信提醒</span>
+						<span class="addWarningsFont" > {{remindersText}}</span>
 						<van-icon class="addWarningsIcon" name="arrow" />
 					</div>
 				</div>
@@ -63,6 +63,7 @@ export default {
 		return {
 			message: '',
 			show: false,
+			remindersText:'123',
 			currentDate: new Date(),
 			timeConfig: {
 				start: {
@@ -77,6 +78,9 @@ export default {
 				},
 			},
 			userName: '林小园',
+			allData:{
+				
+			}
 		};
 	},
 	mounted() {
@@ -89,7 +93,16 @@ export default {
 		// 	clearInterval(timer);
 		// });
 	},
-
+	activated(){
+		let { query} =this.$route;
+		let oldData = this.allData;
+		let { key,text } = query;
+		this.allData={
+			...oldData,
+			...query
+		}
+		this[key] = text;
+	},
 	methods: {
 		touchAddContact() {
 			this.$router.push({ path: '/addContact' });
@@ -99,7 +112,10 @@ export default {
 		},
 		//表单提交
 		onSubmit() {},
-		headerLeft() {},
+		headerLeft() {
+			console.log(1)
+			this.$router.go(-1)
+		},
 		headerRight() {},
 		dateShow() {
 			this.show = true;
