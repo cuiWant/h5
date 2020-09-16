@@ -2,7 +2,11 @@ import Home from '@/pages/Home';
 import Login from '@/pages/Login';
 
 import AddContant from '../pages/addContact';
-import InfoRemind from '../pages/infoRemind';
+import ComponaryBook from '../pages/addContact/componaryBook';
+import OutContact from '../pages/addContact/outContact';
+import EnterPrisePart from '../pages/addContact/outContact/components/enterPrisePart';
+import InfoRemind from '../pages/infoRemind'
+// import { component } from 'vue/types/umd';
 
 const User = () => import('@/pages/User');
 const Entry = () => import('@/pages/Entry');
@@ -37,6 +41,24 @@ export default [
 	{
 		path: '/infoRemind',
 		component: InfoRemind,
+
+
+	},
+{
+	path:'/addContact/outContact',
+	component:OutContact,
+},
+	{
+		path:'/addContact/outContact/enterPrisePart',
+		component:EnterPrisePart
+	},
+	{
+		path:'/addContact/componaryBook',
+		component:ComponaryBook,
+	},
+	{
+		path:'/infoRemind',
+		component:InfoRemind,
 	},
 	{
 		path: '/user',

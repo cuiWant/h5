@@ -6,6 +6,7 @@ import FastClick from 'fastclick';
 // import Vuex from 'vuex';
 import loading from '@/components/Loading';
 import request from '@/api'
+import http from '@/http'
 
 if ('addEventListener' in document) {
 	document.addEventListener(
@@ -23,4 +24,5 @@ Vue.prototype.$loading = loading;
 Vue.prototype.console = console;
 Vue.prototype.$request = request;
 
+Vue.prototype.$http = http;
 moment.locale('zh-cn');

@@ -1,19 +1,19 @@
 <template>
 	<div id="addContact">
-		<Header ref="header" :leftClick="headerLeft" :rightClick="headerRight" :title="'添加参会人'" :rightText="`确定(7)`"></Header>
+		<Header ref="header" :leftClick="headerLeft" :rightClick="headerRight" :title="'添加参会人'" :rightText="`确定(${entryNum})`"></Header>
 		<div class="headerSearch">
 			<van-search class="vant-search" v-model="value" shape="round" @input="onSearch" @search="onSearch" placeholder="请输入搜索关键词" />
 		</div>
 		<div class="contactSettings">
 			<ul class="contactItems">
-				<li class="contactItem">
+				<li class="contactItem" @click="turnOutContact" @touchstart.prevent="turnOutContact">
 					<van-icon class="contacIcon" name="wap-home" />
-					<p class="contacText">会议室</p>
+					<p class="contacText">外部联系人</p>
 				</li>
 				<p class="contactLine" />
-				<li class="contactItem">
+				<li class="contactItem" @click="turnOutComponaryBook" @touchstart.prevent="turnOutComponaryBook">
 					<van-icon class="contacIcon" name="wap-home" />
-					<p class="contacText">会议室</p>
+					<p class="contacText">企业通讯录</p>
 				</li>
 			</ul>
 		</div>
@@ -54,6 +54,7 @@ export default {
 			checked: false,
 			checkeds: false,
 			selectUser: [],
+			entryNum:'0',
 			letterArr: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
 			dataArr: [
 				{
@@ -77,6 +78,16 @@ export default {
 		},
 		checkAllItemsKey(a, b) {
 			console.log(a, b, this.checkeds);
+    },
+    headerLeft() {
+			this.$router.go(-1);
+		},
+		headerRight() {},
+		turnOutContact(){
+			this.$router.push({path:'/addContact/outContact'})
+		},
+		turnOutComponaryBook(){
+			this.$router.push({path:'/addContact/componaryBook'})
 		},
 		onSearch(val) {
 			Toast(val);

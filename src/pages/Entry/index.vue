@@ -5,9 +5,11 @@
             <img src="@/assets/logo.png" alt="">
         </div>
         <div class="entry-select">
-            <div class="entry-button top">
+            <div class="entry-button top" @touchend="topClick" >
                 <div class="left-content">
-                    <div class="icon-container"></div>
+                    <div class="icon-container">
+
+                    </div>
                     <div class="text-container">
                         <div class="top-text">
                             预约会议

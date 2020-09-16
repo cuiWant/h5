@@ -47,7 +47,7 @@
 				</div> -->
 			</div>
 		</div>
-		<Nav :config="[false, false, true]"></Nav>
+		<Nav :config="[true, true, true]"></Nav>
 		<van-action-sheet v-model="show">
 			<div class="content">
 				<van-datetime-picker v-model="currentDate" @confirm="dateHandle" @cancel="dateHandle" type="datetime" :formatter="formatter" />
