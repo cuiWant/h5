@@ -42,12 +42,9 @@
 					</div>
 				</div>
 
-				<van-action-sheet v-model="show">
-					<div class="content">
-						<van-datetime-picker v-model="currentDate" @confirm="dateHandle" @cancel="dateHandle" type="datetime" :formatter="formatter" />
-					</div>
-				</van-action-sheet>
-				<div class="test"></div>
+				<!-- <div class="test">
+					<img class="test" src="../../assets/logo.png" alt="" />
+				</div> -->
 			</div>
 		</div>
 		<Nav :config="[false, false, true]"></Nav>
@@ -144,8 +141,13 @@ export default {
 		overflow: hidden;
 
 	.test
-		height 10000px
-		background pink
+		img
+			height 300px;
+			width 300px
+
+
+		/* height 10000px */
+		/* background pink */
 .home
 	font-family PingFangSC-Medium
 	background #f7f7f7

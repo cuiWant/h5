@@ -14,18 +14,35 @@ export default {
 	},
 	mounted() {
 		//测试账号注销  注销状态
-		console.log(this.$refs.header, 'sss');
+		// console.log(this.$refs.header, 'sss');
 	},
 };
 </script>
 
-<style>
+<style lang="stylus">
 #app {
-	font-family: Avenir, Helvetica, Arial, sans-serif;
+	/* font-family: Avenir, Helvetica, Arial, sans-serif;
 	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-	text-align: center;
-	color: #2c3e50;
+	-moz-osx-font-smoothing: grayscale; */
+	/* text-align: center; */
+	color:#333333;
 	height: 100%;
 }
+
+
+</style>
+<style lang="stylus">
+body .van-toast
+	width: 200px;
+	height: 200px;
+	.van-loading__spinner
+		width 50px
+		height 50px
+	.van-toast__text
+		font-size 20px
+.van-popup
+	height 60px
+	font-size 28px
+	 	
+
 </style>
