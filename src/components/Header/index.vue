@@ -1,6 +1,6 @@
 <template>
 	<header class="header">
-		<van-nav-bar :title="title" @click-left="onClickLeft" @click-right="rightClick" left-arrow :right-text="rightText">
+		<van-nav-bar :title="title" @click-left=" onClickLeft" @click-right="rightClick" left-arrow :right-text="rightText">
 			<!-- <template #right> </template> -->
 		</van-nav-bar>
 		<!-- <slot name="left"></slot>
@@ -28,7 +28,12 @@ export default {
 	},
 	methods: {
 		onClickLeft() {
-			this.$router.go(-1);
+			if(this.leftClick){
+				this.leftClick()
+			}else{
+
+				this.$router.go(-1);
+			}
 		},
 	},
 };

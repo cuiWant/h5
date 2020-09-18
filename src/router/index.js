@@ -12,7 +12,7 @@ const router = new VueRouter({
 });
 
 
-const exclude = ['login','entry']
+const exclude = ['login']
 router.beforeEach((to, from, next) => {
 	// Vue.prototype.$loading.show()	
 

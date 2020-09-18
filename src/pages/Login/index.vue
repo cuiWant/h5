@@ -86,6 +86,7 @@ export default {
 .login-wrapper
 	height 100%
 	padding 207px 75px 247px
+	box-sizing border-box
 	.container
 		display flex
 		flex-direction column

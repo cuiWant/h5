@@ -61,9 +61,9 @@ export default {
      console.log(this.$store,'this')
  },
  methods:{
-    headerLeft(){
-    this.$router.go(-1)
-    },
+     headerLeft(){
+        this.$router.go(-1)
+     },
     topClick(){
         this.$router.push('./home')
     },

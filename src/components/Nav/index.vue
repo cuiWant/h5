@@ -1,8 +1,11 @@
 <template>
 	<div class="footerNav">
-		<ul class="footerItems" v-if="config ? config.some((e) => e === true) : !config">
-			<li v-for="(item, index) in data || navList" :style="config[index] ? '' : { display: 'none' }" :class="path.indexOf(item.name) !== -1 ? 'active' : ''" @click="item.click(index)" :key="index">
-				<van-icon class="footerIcon" :name="item.iconName" />
+		<ul class="footerItems" v-if="config ? config.some((e) => e.status === true) : !config">
+			<li v-for="(item, index) in data || navList" :style="config[index] && config[index].status ? '' : { display: 'none' }" :class="path.indexOf(item.name) !== -1 ? 'active' : ''" @click.prevent.stop="item.click(item)" @touchstart.prevent.stop="item.click(item)" :key="index">
+				<van-icon v-if="!item.custom"  class="footerIcon" :name="item.iconName" />
+					<div v-else-if="item.custom" class="footerIcon" >
+						<span :class="`iconfont ${item.iconName}`"></span>
+					</div>
 				<p class="footerText">{{ item.text }}</p>
 			</li>
 		</ul>
@@ -14,51 +17,55 @@ export default {
 	props: {
 		config: Array,
 		data:Array,
+		click:Function
 	},
 	data() {
 		return {
-			path: 'home',
+			path: 'room',
 			navList: [
 				{
 					that:this,
-					name: 'home',
-					iconName: 'wap-home',
+					name: 'room',
+					custom:true,
+					iconName:"ticobackicon-meeting_room",
 					text: '会议室',
-					click:function(index){
-						this.that.checkNavBar(index)
-					}
+					click:this.iconClick
 				},
 				{
 					that:this,
+					custom:true,
 					name: 'replace',
-					iconName: 'replay',
+					iconName: 'ticobackicon-refresh',
 					text: '重复',
-					click:function(index){
-						this.that.checkNavBar(index)
-					}
+					click:this.iconClick
 				},
 				{
 					that:this,
+					custom:true,
 					name: 'detail',
-					iconName: 'label-o',
+					iconName: 'ticobackicon-meeting_description',
 					text: '简介',
-					click:function(index){
-						this.that.checkNavBar(index)
-					}
+					click:this.iconClick
 				},
 			],
 		};
 	},
 	methods:{
-		checkNavBar(index){
-			this.navList.forEach((item,i) => {
-				item.name = 'home' + i
-			});
-			this.navList[index].name = 'home'
+		checkNavBar(item){
+			// this.navList.forEach((item,i) => {
+			// 	item.name = 'home' + i
+			// });
+			this.path =item.name;
+			// this.navList[index].name = 'homeW'
+		},
+		iconClick(item){
+			this.checkNavBar(item);
+			this.$router.push(`/home/${item.name}`);
+			this.click()
 		}
 	},
 	mounted() {
-		this.path = this.$router.currentRoute.path;
+		// this.path = this.$router.currentRoute.path;
 	},
 };
 </script>
@@ -76,9 +83,16 @@ export default {
 		height 100%
 		display flex
 		justify-content space-around
+		li
+			display flex
+			flex-direction column
 		.active
 			color #1989fa
 		.footerIcon
+			display flex
+			justify-content center
+			font-size 40px
+		.iconfont 
 			font-size 40px
 		.footerText
 			margin 5px 0

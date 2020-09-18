@@ -8,8 +8,18 @@ import EnterPrisePart from '../pages/addContact/outContact/components/enterPrise
 import InfoRemind from '../pages/infoRemind'
 // import { component } from 'vue/types/umd';
 
-const User = () => import('@/pages/User');
-const Entry = () => import('@/pages/Entry');
+import User from "@/pages/User"
+import Entry from "@/pages/Entry"
+import Room from "@/pages/Home/Room"
+import Detail from "@/pages/Home/Detail"
+import Replace from "@/pages/Home/Replace"
+
+
+// const User = () => import('@/pages/User');
+// const Entry = () => import('@/pages/Entry');
+// const Room = () => import('@/pages/Home/Room');
+// const Detail = () => import('@/pages/Home/Detail');
+// const Replace = () => import('@/pages/Home/Replace');
 export default [
 	{
 		path: '/',
@@ -27,12 +37,20 @@ export default [
 		path: '/home',
 		// redirect: './home'
 		component: Home,
-		// children:[
-		// 	{
-		// 		path:'/home/addContant',
-		// 		component:AddContant
-		// 	}
-		// ]
+		children:[
+			{
+				path:'/home/room',
+				component:Room
+			},
+			{
+				path:'/home/detail',
+				component:Detail
+			},
+			{
+				path:'/home/replace',
+				component:Replace
+			},
+		]
 	},
 	{
 		path: '/addContact',

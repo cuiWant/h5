@@ -6,14 +6,20 @@
 		<!-- <meta name="viewport" content="width=device-width,initial-scale=1.0" /> -->
 		<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,viewport-fit=cover,user-scalable=no,width=device-width" />
 		<link rel="icon" href="<%= BASE_URL %>favicon.ico" />
-		<link rel="stylesheet" href="./reset.css" />
 		<link rel="stylesheet" href="./iconfont/iconfont.css">
+		<link rel="stylesheet" href="./reset.css" />
 		<title>易联会议预约</title>
+		<style>
+			html,body{
+				height: 100%;
+				overflow: hidden;
+			}
+		</style>
 	</head>
 	<body>
-		<noscript>
+		<!-- <noscript>
 			<strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
-		</noscript>
+		</noscript> -->
 		<div id="app"></div>
 	</body>
 	<script>
