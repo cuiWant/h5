@@ -2,7 +2,10 @@
  <div class="entry-container">
 		<Header ref="header" :leftClick="headerLeft" :rightClick="headerRight" :title="'会议预约'" rightText=""></Header>
         <div class="title-picture">
-            <img src="@/assets/logo.png" alt="">
+            <!-- <img class="img" src="@/assets/logo.png" alt=""> -->
+            <svg class="icon img" aria-hidden="true">
+                <use xlink:href="#ticobackicon-default"></use>
+            </svg>
         </div>
         <div class="entry-select">
             <div class="entry-button top border-1px" @touchend="topClick" >
@@ -62,7 +65,7 @@ export default {
  },
  methods:{
      headerLeft(){
-        this.$router.go(-1)
+        this.$router.push('/login')
      },
     topClick(){
         this.$router.push('./home')
@@ -82,7 +85,7 @@ export default {
         height 615px 
         width 100%
         box-shadow 0px 11px 24px 0px rgba(233, 233, 233, 0.39)
-        >img    
+        .img    
             height 100% 
             width 100%
     .entry-select

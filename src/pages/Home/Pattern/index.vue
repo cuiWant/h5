@@ -1,5 +1,5 @@
 <template>
- <div class="replace-wrapper">
+ <div class="patten-wrapper">
 		<Header :leftClick="headerLeft" :rightClick="headerRight" :title="'重复'" rightText="完成"></Header>
       <div ref="wrapper" class="replace-list">
 
@@ -12,26 +12,7 @@
             </van-cell>
          </van-cell-group>
       </van-radio-group>
-      <div class="line"></div>
-         <van-cell v-if="radio"  @click.prevent="show=true"  title="重复次数" class="cell border-bottom"   is-link arrow-direction="down" :value="num" />
-         <van-popup
-         v-model="show"
-         position="bottom"
-         closeable
-         :style="{ height: '34%' }"
-         >
-         <van-picker
-               item-height="60px"
-               visible-item-count="3"
-               show-toolbar
-               :columns="columns"
-               @confirm="onConfirm"
-               @cancel="onCancel"
-               :default-index="defaultIndex"
-               @change="onChange"
-            />
-         </van-popup>
-      </div>
+ </div>
  </div>
 </template>
  
@@ -49,27 +30,23 @@ export default {
       },
       data () {
       return {
-         name:'replace',
+         name:'pattern',
          repeat_flag:false,
          num:'1次',
          radio:'',
          defaultIndex:0,
          show:false,
          radioData:[{
-            text:'不重复',
+            text:'视频会议',
             value:false,
          },
          {
-            text:'每个工作日(周一到周五)',
-            value:"Mon,Tue,Wed,Thu,Fri",
+            text:'智能会议',
+            value:"SMART",
          },
          {
-            text:'每天',
-            value:'1'
-         },
-         {
-            text:'每周',
-            value:'7'
+            text:'节能会议',
+            value:'ENERGY'
          }
          ],
        columns,
@@ -122,7 +99,7 @@ export default {
 <style scoped  lang = "stylus">
 @import "../../../common/stylus/mixins.styl";
    
-.replace-list
+.patten-wrapper
       height calc(100% - 88px)
    .cell
          height: 101px

@@ -21,7 +21,7 @@ export default {
 	},
 	data() {
 		return {
-			path: 'room',
+			path: '',
 			navList: [
 				{
 					that:this,

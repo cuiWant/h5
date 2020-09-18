@@ -19,7 +19,7 @@
 			<div>
 				<ul>
 					<li v-for="(item,index) in checkMessage" :key="index" class="btnItem" :class="checkNum === index ? 'btnNumClass' : ''" @click="checkingNum(index)" @touchstart.prevent="checkingNum(index)">
-						<span>{{item}}</span>
+						<span>{{item.text}}</span>
 					</li>
 				</ul>
 			</div>
@@ -41,7 +41,13 @@ export default {
 				{text:'1小时前',value:60},
 				{text:'1天前',value:1440}
 			],
-			checkMessage:['站内信','短信','电话']		
+			checkMessage:[{
+					text:'站内信',value:1
+					},{
+					text:'企业微信',value:2
+					},{
+						text:'邮件',value:4
+						}]		
 		};
 	},
 	methods: {
@@ -58,8 +64,8 @@ export default {
 			let current = this.checkData[this.checkIndex];
 			let obj = {
 				reminders_time:current.value,
-				reminders:this.checkNum,
-				text:`${current.text},${this.checkMessage[this.checkNum]}`,
+				reminders:this.checkMessage[this.checkNum].value,
+				text:`${current.text},${this.checkMessage[this.checkNum].text}`,
 				key:'remindersText'
 			}
 			this.$router.push({path:'/home',query:obj});

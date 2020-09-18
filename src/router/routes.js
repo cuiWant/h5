@@ -13,6 +13,7 @@ import Entry from "@/pages/Entry"
 import Room from "@/pages/Home/Room"
 import Detail from "@/pages/Home/Detail"
 import Replace from "@/pages/Home/Replace"
+import Pattern from "@/pages/Home/Pattern"
 
 
 // const User = () => import('@/pages/User');
@@ -49,6 +50,10 @@ export default [
 			{
 				path:'/home/replace',
 				component:Replace
+			},
+			{
+				path:'/home/pattern',
+				component:Pattern
 			},
 		]
 	},
