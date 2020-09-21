@@ -7,12 +7,16 @@
 		<div class="contactSettings">
 			<ul class="contactItems">
 				<li class="contactItem" @click="turnOutContact" @touchstart.prevent="turnOutContact">
-					<van-icon class="contacIcon" name="wap-home" />
+					<div class="icon-container">
+						<span class="iconfont ticobackicon-external_contact"></span>
+					</div>
 					<p class="contacText">外部联系人</p>
 				</li>
 				<p class="contactLine" />
 				<li class="contactItem" @click="turnOutComponaryBook" @touchstart.prevent="turnOutComponaryBook">
-					<van-icon class="contacIcon" name="wap-home" />
+					<div class="icon-container fe9">
+						<span class="iconfont ticobackicon-address"></span>
+					</div>
 					<p class="contacText">企业通讯录</p>
 				</li>
 			</ul>
@@ -23,22 +27,22 @@
 			<p class="contactOnlyText">暂无选择参会人</p>
 		</div>
 		<div class="contactUnix" v-if="show">
-			<van-checkbox class="contactAllcheckbox" v-model="checked" @click.prevent="checkAllItems">复选框</van-checkbox>
-			<ul class="contactBottom">
+			<van-checkbox class="contactAllcheckbox" v-model="checked" @touchstart.prevent="checkAllItems" @click.prevent="checkAllItems">复选框</van-checkbox>
+		<van-checkbox-group class="contactBottom" v-model="result" direction="horizontal">
 				<li v-for="(item, index) in letterArr" :key="index">
-					<div v-if="dataArr[index]">
+					<div v-if="apiData[item]">
 						<p class="contactBottomCaps">{{ item }}</p>
-						<div class="contactBottomAuthor">
-							<van-checkbox class="contactAllcheckbox" v-model="checkeds" @click.prevent="checkAllItemsKey(dataArr[index])" />
+						<div class="contactBottomAuthor" v-for="(element) in apiData[item]" :key="element.id" >
+							<van-checkbox class="contactAllcheckbox" v-model="checkeds" @click.prevent="checkAllItemsKey(element.id)" />
 							<img class="contactAllImage" src="@/assets/logo.png" />
 							<div class="contactNameAndPost">
-								<p class="contactName">{{ dataArr[index].name }}</p>
-								<p class="contactPost">{{ dataArr[index].post }}</p>
+								<p class="contactName">{{ console.log(element)  || element.cn_name }}</p>
+								<p class="contactPost">{{ element.position }}</p>
 							</div>
 						</div>
 					</div>
 				</li>
-			</ul>
+	</van-checkbox-group>
 		</div>
 	</div>
 </template>
@@ -47,12 +51,16 @@
 import { CheckboxGroup, Toast } from 'vant';
 export default {
 	name: 'addContact',
+	props:{
+         leftClick:Function,
+	},
 	data() {
 		return {
 			value: '',
 			show: true,
 			checked: false,
 			checkeds: false,
+			apiData:[],
 			selectUser: [],
 			entryNum:'0',
 			letterArr: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
@@ -72,6 +80,12 @@ export default {
 			],
 		};
 	},
+	mounted(){
+		this.$request.wechatQuery().then((res)=>{
+			let { data } = res;
+			this.apiData =data;
+		})
+	},
 	methods: {
 		checkAllItems() {
 			console.log(this.checked);
@@ -80,7 +94,7 @@ export default {
 			console.log(a, b, this.checkeds);
     },
     headerLeft() {
-			this.$router.go(-1);
+			this.leftClick()
 		},
 		headerRight() {},
 		turnOutContact(){
@@ -103,9 +117,6 @@ export default {
 #addContact
   background #f7f7f7
 	height 100%
-
-
-
 
 .headerSearch
    width 100%
@@ -132,10 +143,10 @@ export default {
       margin-left 30px
 .contentText
   width 100%
-  height 110px
-  line-height 110px
+  height 87px
+  line-height 87px
   background #f7f7f7
-  font-size 34px
+  font-size 28px
   text-align left
   padding-left 30px
   color #BEBEBE
@@ -166,7 +177,7 @@ export default {
     width 84px
     height 84px
     border-radius 10px
-    margin-right 10px
+    margin-right 27px
   .contactNameAndPost
     font-size 34px
     .contactName
@@ -187,4 +198,31 @@ export default {
       background-color #fff
       .contactAllcheckbox
         font-size 34px
+</style>
+
+
+<style lang="stylus">
+#addContact
+	.vant-search
+		.van-cell
+			font-size 34px
+			line-height 34px
+		.van-icon
+			line-height 34px
+			font-size 34px
+	.contactSettings
+		.icon-container
+			width: 66px
+			height: 66px
+			background-color: #15bc84;
+			border-radius 50%
+			display flex
+			justify-content center
+			align-items center
+			margin-right 24px
+			.iconfont 
+				color #fff
+		.fe9
+			background #fe943e
+
 </style>

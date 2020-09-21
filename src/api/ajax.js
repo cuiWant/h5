@@ -53,12 +53,14 @@ axios.interceptors.response.use(
 		let { data={} } = response
 		
 		if(!data.success){
-			Notify({type: 'danger', message: data.err_msg || '接口异常',duration:1000});
+			console.log(data,'reasondata')
+			Notify({type: 'danger', message:(data.err_msg || '接口异常'),duration:1000});
 		}
 		return data;
 	},
 	error => {
-		Notify({type: 'danger', message: error || '接口异常',duration:1000});
+		console.log(error)
+		Notify({type: 'danger', message: ( '网络异常'),duration:1000});
 		loading.close()
 		// console.log(error)
 		// 请求异常

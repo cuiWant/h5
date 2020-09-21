@@ -56,6 +56,10 @@ export default [
 				path:'/home/pattern',
 				component:Pattern
 			},
+			{
+				path: '/home/addContact',
+				component: AddContant,
+			}
 		]
 	},
 	{

@@ -124,7 +124,6 @@ export default {
 		const { wrapper } = this.$refs;
       new BScroll(wrapper,{
             click: true,
-            bounce: false,
             preventDefault: false,
       })      
       },

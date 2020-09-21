@@ -35,7 +35,7 @@
 						<div class="addContactsRight">
 							<span class="addContactFont">添加参会人</span>
 						</div>
-							<van-icon class="addContactsIcon" @click="touchAddContact" @touchend.prevent="touchAddContact" name="arrow" />
+							<van-icon class="addContactsIcon" @click="touchAddContact(true)" @touchend.prevent="touchAddContact(true)" name="arrow" />
 					</div>
 					<div class="addContacts border-bottom" >
 						<span class="iconfont  addContactsLeft ticobackicon-meeting_room  "></span>
@@ -194,6 +194,10 @@ export default {
 		// 	this.firstFlag = true;
 		// 	return
 		// }
+		console.log(111)
+
+		this.show =false;
+		this.footerRouterShow =false;
 		let { query} =this.$route;
 		let oldData = this.allData;
 		let { key,text } = query;
@@ -277,8 +281,12 @@ export default {
 				})
 			}
 		},
-		touchAddContact() {
-			this.$router.push({ path: '/addContact' });
+		touchAddContact(bool) {
+			if(bool){
+				this.footerRouterShow =true
+				this.$router.push({ path: '/home/addContact' });
+
+			}
 		},
 		touchInfoRemind(bool) {
 			if(bool){
