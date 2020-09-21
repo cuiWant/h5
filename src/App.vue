@@ -41,7 +41,7 @@ body .van-toast
 		width 50px
 		height 50px
 	.van-toast__text
-		font-size 20px
+		font-size 25px
 .van-popup
 	height 60px
 	font-size 28px

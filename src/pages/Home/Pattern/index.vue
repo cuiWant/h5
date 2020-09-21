@@ -38,7 +38,7 @@ export default {
          show:false,
          radioData:[{
             text:'视频会议',
-            value:false,
+            value:"VIDEO",
          },
          {
             text:'智能会议',
@@ -69,12 +69,11 @@ export default {
             this.leftClick()
             this.$router.push({path:'/home',
             })
-
               this.handleSubmit({
                  key:this.name,
-                 text:`${radioText ? radioText.text:'无'} ${ this.num ? ','+this.num + '终止':''}`,
-                 [this.radio && "interval_flag"]:this.radio,
-                 replaceCount:this.defaultIndex+1
+                 text:`${radioText ? radioText.text:''}`,
+                 [this.radio && "meeting_patten"]:console.log(this.radioData) || this.radioData,
+               //   replaceCount:this.defaultIndex+1
                   //   text:`${}`,
                //   meeting_introductio:this.message
                })

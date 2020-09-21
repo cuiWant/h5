@@ -2,10 +2,11 @@ import Home from '@/pages/Home';
 import Login from '@/pages/Login';
 
 import AddContant from '../pages/addContact';
+import AllMeeting from '../pages/AllMeeting';
 import ComponaryBook from '../pages/addContact/componaryBook';
 import OutContact from '../pages/addContact/outContact';
 import EnterPrisePart from '../pages/addContact/outContact/components/enterPrisePart';
-import InfoRemind from '../pages/infoRemind'
+import InfoRemind from '../pages/infoRemind';
 // import { component } from 'vue/types/umd';
 
 import User from "@/pages/User"
@@ -56,6 +57,10 @@ export default [
 				component:Pattern
 			},
 		]
+	},
+	{
+		path:'/allmeeting',
+		component:AllMeeting
 	},
 	{
 		path: '/addContact',

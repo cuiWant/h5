@@ -22,11 +22,10 @@
          </div>
       </div>
       <div  ref="wrapper" class="room-list">
-         <div>
-
+         <div    class="room-list-wrapper"> 
          <van-checkbox-group v-model="result">
             <div class="line"></div>
-            <div class="room-container" @touchstart ="console.log(1)" @click="console.log(2)">
+            <div class="room-container">
                <van-checkbox name="a">
                   <RoomItem></RoomItem>
                </van-checkbox>
@@ -64,7 +63,6 @@
 
          </van-checkbox-group>
          </div>
-
       </div>
       <div class="footer">
          <div class="text-container">
@@ -122,11 +120,8 @@ export default {
       },
       mounted(){
 		const { wrapper } = this.$refs;
-      new BScroll(wrapper,{
-            click: true,
-            bounce: false,
-            preventDefault: false,
-      })      
+   console.log(new BScroll(wrapper))
+            
       },
       methods:{
          headerLeft(){
@@ -170,7 +165,7 @@ export default {
 </script>
  
 <style scoped lang = "stylus">
-@import "../../../common/stylus/mixins.styl";
+@import "../../common/stylus/mixins.styl";
 .room-wrapper
    height  100%
    .room-header
@@ -205,11 +200,12 @@ export default {
       /* position relative */
       height calc(100% - 88px - 98px - 183px )
       overflow hidden
+      background aqua
       /* display flex
       justify-content center */
       .room-list-wrapper
       .room-container
-         padding 0px 28px  0px 31px
+         /* padding 0px 28px  0px 31px */
          background #fff
       .line
             height 21px
@@ -278,6 +274,5 @@ export default {
       .van-picker__columns
          transform: translateY(10%)
 .van-checkbox-group
-   position relative
-   z-index 10000
+   height 10000px !importent
 </style>
