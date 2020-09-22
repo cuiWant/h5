@@ -5,7 +5,7 @@
 
       <van-radio-group v-model="radio">
          <van-cell-group>
-            <van-cell :class="`${index !=  (radioData.length-1) ? 'border-bottom' :''} cell`"  v-for="(item,index) in  radioData " :key="item.value" :title="item.text" clickable @click="radio = item.value" @touchstart="radio = item.value">
+            <van-cell :class="`${index !=  (radioData.length-1) ? 'border-bottom' :''} cell`"  v-for="(item,index) in  radioData " :key="item.value" :title="item.text" clickable @click="radio = item.value" >
                <template #right-icon>
                <van-radio icon-size="25px" :name="item.value" />
                </template>

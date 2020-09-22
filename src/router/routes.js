@@ -3,7 +3,7 @@ import Login from '@/pages/Login';
 
 import AddContant from '../pages/addContact';
 import AllMeeting from '../pages/AllMeeting';
-import ComponaryBook from '../pages/addContact/componaryBook';
+import ComponaryBook from '@/pages/addContact/componaryBook';
 import OutContact from '../pages/addContact/outContact';
 import EnterPrisePart from '../pages/addContact/outContact/components/enterPrisePart';
 import InfoRemind from '../pages/infoRemind';
@@ -59,6 +59,12 @@ export default [
 			{
 				path: '/home/addContact',
 				component: AddContant,
+				children:[
+					{
+						path:'/home/addContact/componaryBook',
+						component:ComponaryBook,
+					}
+				]
 			}
 		]
 	},
@@ -66,34 +72,34 @@ export default [
 		path:'/allmeeting',
 		component:AllMeeting
 	},
-	{
-		path: '/addContact',
-		component: AddContant,
-	},
-	{
-		path: '/infoRemind',
-		component: InfoRemind,
+// 	{
+// 		path: '/addContact',
+// 		component: AddContant,
+// 	},
+// 	{
+// 		path: '/infoRemind',
+// 		component: InfoRemind,
 
 
-	},
-{
-	path:'/addContact/outContact',
-	component:OutContact,
-},
-	{
-		path:'/addContact/outContact/enterPrisePart',
-		component:EnterPrisePart
-	},
-	{
-		path:'/addContact/componaryBook',
-		component:ComponaryBook,
-	},
-	{
-		path:'/infoRemind',
-		component:InfoRemind,
-	},
-	{
-		path: '/user',
-		component: User,
-	},
+// 	},
+// {
+// 	path:'/addContact/outContact',
+// 	component:OutContact,
+// },
+// 	{
+// 		path:'/addContact/outContact/enterPrisePart',
+// 		component:EnterPrisePart
+// 	},
+// 	{
+// 		path:'/addContact/componaryBook',
+// 		component:ComponaryBook,
+// 	},
+// 	{
+// 		path:'/infoRemind',
+// 		component:InfoRemind,
+// 	},
+// 	{
+// 		path: '/user',
+// 		component: User,
+// 	},
 ];

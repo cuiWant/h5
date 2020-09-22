@@ -1,7 +1,7 @@
 <template>
 	<div class="footerNav">
 		<ul class="footerItems" v-if="config ? config.some((e) => e.status === true) : !config">
-			<li v-for="(item, index) in data || navList" :style="config[index] && config[index].status ? '' : { display: 'none' }" :class="path.indexOf(item.name) !== -1 ? 'active' : ''" @click.prevent.stop="item.click(item)" @touchstart.prevent.stop="item.click(item)" :key="index">
+			<li v-for="(item, index) in data || navList" :style="config[index] && config[index].status ? '' : { display: 'none' }" :class="path.indexOf(item.name) !== -1 ? 'active' : ''" @click.prevent.stop="item.click(item)"  :key="index">
 				<van-icon v-if="!item.custom"  class="footerIcon" :name="item.iconName" />
 					<div v-else-if="item.custom" class="footerIcon" >
 						<span :class="`iconfont ${item.iconName}`"></span>

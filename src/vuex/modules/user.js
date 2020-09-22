@@ -8,7 +8,7 @@ import { RECEIVE_USER, RESET_USER, RECEIVE_TOKEN, RESET_TOKEN } from '../mutatio
 // } from '../../api'
 
 const state = {
-	user: {}, // 登陆用户信息对象
+	user:(localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')))  || {}, // 登陆用户信息对象
 	token: '',
 };
 const mutations = {

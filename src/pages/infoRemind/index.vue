@@ -5,7 +5,7 @@
 		<div class="topContent">
 			<ul>
 				
-				<li class="topKeyItem" v-for="(item,index) in  checkData" :key="index"  @click="checkingItem(index)" @touchstart.prevent="checkingItem(index)">
+				<li class="topKeyItem" v-for="(item,index) in  checkData" :key="index"  @click="checkingItem(index)" >
 					<div class="topItem" :class=" checkIndex === index ? 'makesure' : ''">
 						<p>{{item.text}}</p>
 						<van-icon name="success" v-if="checkIndex === index" />
@@ -18,7 +18,7 @@
 			<p>提醒方式</p>
 			<div>
 				<ul>
-					<li v-for="(item,index) in checkMessage" :key="index" class="btnItem" :class="checkNum === index ? 'btnNumClass' : ''" @click="checkingNum(index)" @touchstart.prevent="checkingNum(index)">
+					<li v-for="(item,index) in checkMessage" :key="index" class="btnItem" :class="checkNum === index ? 'btnNumClass' : ''" @click="checkingNum(index)" >
 						<span>{{item.text}}</span>
 					</li>
 				</ul>

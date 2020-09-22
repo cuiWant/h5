@@ -8,7 +8,7 @@
             </svg>
         </div>
         <div class="entry-select">
-            <div class="entry-button top border-1px" @touchstart.prevent="topClick" @click="topClick" >
+            <div class="entry-button top border-1px"  @click="topClick" >
                 <div class="left-content">
                     <div class="icon-container">
                         <span class="iconfont ticobackicon-shift"></span>
@@ -29,17 +29,17 @@
                 </div>
 
             </div>
-            <div class="entry-button bottom border-1px" @touchstart.prevent="bottomClick" @click="bottomClick">
+            <div class="entry-button bottom border-1px" @click="bottomClick">
                 <div class="left-content">
                     <div class="icon-container">
                         <span class="iconfont ticobackicon-meetinglist"  ></span>
                     </div>
                     <div class="text-container">
                         <div class="top-text">
-                            预约会议
+                            全部会议
                         </div>
                         <div class="bottom-text">
-                            随时随地预约会议
+                            查看全部会议
                         </div>
                     </div>
                 </div>

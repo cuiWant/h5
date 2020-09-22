@@ -8,12 +8,12 @@
 						<van-field v-model="theme" rows="1" autosize type="textarea" placeholder="会议主题" />
 					</div>
 					<div class="date-select">
-						<div class="time"  @click="dateShow(true)" @touchend.prevent="dateShow(true)">
+						<div class="time"  @click="dateShow(true)" >
 							<div class="time-top">{{ timeConfig.start.date }} {{ timeConfig.start.time }}</div>
 							<div class="time-bottom">{{ timeConfig.start.week }}</div>
 						</div>
 						<div class="middle-line">/</div>
-						<div class="time" @click="dateShow(false)" @touchend.prevent="dateShow(false)">
+						<div class="time" @click="dateShow(false)" >
 							<div class="time-top">{{ timeConfig.start.date }} {{ timeConfig.start.time }}</div>
 							<div class="time-bottom">{{ timeConfig.start.week }}</div>
 						</div>
@@ -28,70 +28,71 @@
 								<van-tag class='tag' type="primary">组织人</van-tag>
 							</span>
 						</div>
-							<van-icon class="addContactsIcon" @click="touchAddContact" @touchend.prevent="touchAddContact" name="arrow" />
+							<van-icon class="addContactsIcon" @click="touchAddContact"  name="arrow" />
 					</div>
 					<div class="addContacts space-bottom" >
 						<span class="iconfont  addContactsLeft ticobackicon-meeting_person  "></span>
-						<div class="addContactsRight">
-							<span class="addContactFont">添加参会人</span>
+						<div class="addContactsRight" @click="touchAddContact(true)">
+							<span v-if="contact" class="addContactFont">{{contact}}</span>
+							<span v-else class="addContactFont">选择参会人</span>
 						</div>
-							<van-icon class="addContactsIcon" @click="touchAddContact(true)" @touchend.prevent="touchAddContact(true)" name="arrow" />
+							<van-icon class="addContactsIcon" @click="touchAddContact(true)" name="arrow" />
 					</div>
 					<div class="addContacts border-bottom" >
 						<span class="iconfont  addContactsLeft ticobackicon-meeting_room  "></span>
-						<div class="addContactsRight" @click="goRoom(true)" @touchend.prevent="goRoom(true)" >
+						<div class="addContactsRight" @click="goRoom(true)"  >
 								<span v-if="room" class="addContactFont">{{room}}</span>
 							<span v-else class="addContactFont">请选择会议室</span>
 							 
 						</div>
 							<div>
-							 <van-icon  v-if="!room" class="addContactsIcon" name="arrow" @click="goRoom(true)" @touchend.prevent="goRoom(true)" /><van-icon  v-else class="addContactsIcon" name="cross" @click="goRoom(false)" @touchstart.prevent="goRoom(false)" />
+							 <van-icon  v-if="!room" class="addContactsIcon" name="arrow" @click="goRoom(true)"  /><van-icon  v-else class="addContactsIcon" name="cross" @click="goRoom(false)"  />
 							</div> 
 					</div>
 					<div class="addContacts space-bottom" >
 						<span class="iconfont  addContactsLeft ticobackicon-meeting_type  "></span>
-						<div class="addContactsRight" @click="goPattern(true)" @touchstart.prevent="goPattern(true)">
+						<div class="addContactsRight" @click="goPattern(true)" >
 							<span v-if="pattern" class="addContactFont">{{console.log(pattern) || pattern}}</span>
 							<span v-else class="addContactFont">请选择会议模式</span>
 
 								<!-- <span v-if="replace" class="addContactFont">{{replace}}</span>
 							<span v-else class="addContactFont">请选择重复次数</span> -->
 						</div>
-							<van-icon v-if="!pattern" class="addContactsIcon" @click="goPattern(true)" @touchend.prevent="goPattern(true)" name="arrow" />
-							<van-icon v-else class="addContactsIcon" @click="goPattern(false)" @touchend.prevent="goPattern(false)" name="cross" />
+							<van-icon v-if="!pattern" class="addContactsIcon" @click="goPattern(true)"  name="arrow" />
+							<van-icon v-else class="addContactsIcon" @click="goPattern(false)"  name="cross" />
 					</div>
 					<div class="addContacts space-bottom" >
 						<span class="iconfont  addContactsLeft ticobackicon-refresh  "></span>
-						<div class="addContactsRight" @click="goReplace(true)" @touchstart.prevent="goReplace(true)" >
+						<div class="addContactsRight" @click="goReplace(true)"  >
 							<span v-if="replace" class="addContactFont">{{replace}}</span>
 							<span v-else class="addContactFont">请选择重复次数</span>
 							 
 						</div>
 							<div>
-							 <van-icon  v-if="!replace" class="addContactsIcon" name="arrow" @click="goReplace(true)" @touchstart.prevent="goReplace(true)" /><van-icon  @click="goRoom(false)" @touchstart.prevent="goRoom(false)" v-else class="addContactsIcon" name="cross" />
+							 <van-icon  v-if="!replace" class="addContactsIcon" name="arrow" @click="goReplace(true)"  /><van-icon  @click="goRoom(false)"  v-else class="addContactsIcon" name="cross" />
 							</div> 
 					</div>
 
 				<div class="addContacts space-bottom" >
 						<span class="iconfont  addContactsLeft ticobackicon-meeting_remind  "></span>
-						<div class="addContactsRight" @click="touchInfoRemind(true)" @touchstart.prevent="touchInfoRemind(true)" >
+						<div class="addContactsRight" @click="touchInfoRemind(true)"  >
 							<span v-if="remindersText" class="addContactFont">{{remindersText}}</span>
 							<span v-else class="addContactFont">请选择通知方式</span>
 							 
 						</div>
 							<div>
-							 <van-icon  v-if="!remindersText" class="addContactsIcon" @click="touchInfoRemind(true)" @touchstart.prevent="touchInfoRemind(true)" name="arrow" /><van-icon  v-else @click="touchInfoRemind(false)" @touchstart.prevent="touchInfoRemind(false)"  class="addContactsIcon" name="cross" />
+							 <van-icon  v-if="!remindersText" class="addContactsIcon" @click="touchInfoRemind(true)"  name="arrow" /><van-icon  v-else @click="touchInfoRemind(false)"   class="addContactsIcon" name="cross" />
 							</div> 
 					</div>
 				<div class="addContacts space-bottom" >
 						<span class="iconfont  addContactsLeft ticobackicon-meeting_description  "></span>
-						<div class="addContactsRight" @click="goDetail(true)" @touchstart.prevent="goDetail(true)">
+						<div class="addContactsRight" @click="goDetail(true)" >
 							<span v-if="detail" class="addContactFont">{{detail}}</span>
 							<span v-else class="addContactFont">请添加描述</span>
 							 
 						</div>
 							<div>
-							 <van-icon  v-if="!detail" class="addContactsIcon" @click="goDetail(true)" @touchstart.prevent="goDetail(true)" name="arrow" /><van-icon @click="goDetail(false)" @touchstart.prevent="goDetail(false)"  v-else class="addContactsIcon" name="cross" />
+							 <van-icon  v-if="!detail" class="addContactsIcon" @click="goDetail(true)"  name="arrow" /><van-icon @click="goDetail(false)"   v-else class="addContactsIcon" name="cross" />
 							</div> 
 					</div>
 				</div>
@@ -104,7 +105,11 @@
 		</div>
 		<Nav v-if="(navData.some(e=>e.status))" :config="navData" :click="handleNavClick"></Nav>
 		<van-popup  :lock-scroll="false" :overlay="false" v-model="footerRouterShow" position="right" :style="{ width: '100%',height:'100%' }" >
+		<keep-alive >  
+			
 			<router-view :handleSubmit="handleChidlren" :leftClick="routerLeftClick" ></router-view>
+		</keep-alive >  
+		
 		</van-popup>
 		<van-popup  v-model="show"
          class="time-popup"
@@ -123,7 +128,7 @@
 <script>
 import BScroll from 'better-scroll';
 import {Toast} from 'vant'
-const showRouter = ['detail','replace','room']
+const showRouter = ['detail','replace','room','addContact']
 let { pathname }   =window.location
 let bool  = !!showRouter.find((e)=>{
 	return pathname.indexOf(e) !== -1
@@ -140,6 +145,7 @@ export default {
 			currentDate: new Date(),
 			firstFlag:false,
 			theme: '',
+			contact:'',
 			show:false,
 			footerRouterShow:bool,
 			replace:'',
@@ -180,7 +186,11 @@ export default {
 	mounted() {
 		// console.log(this.Toast,'this')
 		const { wrapper } = this.$refs;
-		new BScroll(wrapper);
+		new BScroll(wrapper,{
+			click: true,
+			stopPropagation:true,
+            preventDefault: true,
+		});
 
 		// let timer = setInterval(() => {
 		// 	console.log(1);

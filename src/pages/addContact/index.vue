@@ -1,19 +1,19 @@
 <template>
 	<div id="addContact">
-		<Header ref="header" :leftClick="headerLeft" :rightClick="headerRight" :title="'添加参会人'" :rightText="`确定(${entryNum})`"></Header>
+		<Header ref="header" :leftClick="headerLeft" :rightClick="headerRight" :title="'添加参会人'" :rightText="`确定(${result.length})`"></Header>
 		<div class="headerSearch">
 			<van-search class="vant-search" v-model="value" shape="round" @input="onSearch" @search="onSearch" placeholder="请输入搜索关键词" />
 		</div>
 		<div class="contactSettings">
 			<ul class="contactItems">
-				<li class="contactItem" @click="turnOutContact" @touchstart.prevent="turnOutContact">
+				<li class="contactItem" @click="turnOutContact" >
 					<div class="icon-container">
 						<span class="iconfont ticobackicon-external_contact"></span>
 					</div>
 					<p class="contacText">外部联系人</p>
 				</li>
 				<p class="contactLine" />
-				<li class="contactItem" @click="turnOutComponaryBook" @touchstart.prevent="turnOutComponaryBook">
+				<li class="contactItem" @click="turnOutComponaryBook" >
 					<div class="icon-container fe9">
 						<span class="iconfont ticobackicon-address"></span>
 					</div>
@@ -27,28 +27,66 @@
 			<p class="contactOnlyText">暂无选择参会人</p>
 		</div>
 		<div class="contactUnix" v-if="show">
-			<van-checkbox class="contactAllcheckbox" v-model="checked" @touchstart.prevent="checkAllItems" @click.prevent="checkAllItems">复选框</van-checkbox>
-		<van-checkbox-group class="contactBottom" v-model="result" direction="horizontal">
+			<van-checkbox class="contactAllcheckbox" v-model="checked"   @click.prevent="checkAllItems(checked)">全选</van-checkbox>
+		<div class="contactBottom" :style="{overflow:'hidden'}" ref="contact">
+
+		<van-checkbox-group v-if="!value" class=" contactBottom-container"  v-model="result" ref="checkboxGroup" direction="horizontal">
+			<ul style="width:100%">
 				<li v-for="(item, index) in letterArr" :key="index">
-					<div v-if="apiData[item]">
+					<div v-if="apiData[item] && apiData[item].SelectKey">
 						<p class="contactBottomCaps">{{ item }}</p>
-						<div class="contactBottomAuthor" v-for="(element) in apiData[item]" :key="element.id" >
-							<van-checkbox class="contactAllcheckbox" v-model="checkeds" @click.prevent="checkAllItemsKey(element.id)" />
-							<img class="contactAllImage" src="@/assets/logo.png" />
-							<div class="contactNameAndPost">
-								<p class="contactName">{{ console.log(element)  || element.cn_name }}</p>
-								<p class="contactPost">{{ element.position }}</p>
+
+					<div class="contactBottomAuthor" v-for="(element) in apiData[item]" :key="element.id" >
+						<div class="contactBottomAuthor" style="width:100%,height:100%" v-if="element.selectKey && element.selectKey.flag"  >
+						<!-- <div  class="contactBottomAuthor" style="width:100%,height:100%"   v-if="true"> -->
+						<van-checkbox class="contactAllcheckbox"   :name="element.id"  />
+								<img class="contactAllImage" src="@/assets/logo.png" />
+								<div class="contactNameAndPost">
+									<p class="contactName">{{ element.cn_name }}</p>
+									<p class="contactPost">{{ element.position }}</p>
+								</div>
 							</div>
 						</div>
 					</div>
 				</li>
-	</van-checkbox-group>
+			</ul>
+	
+		</van-checkbox-group>
+		<van-checkbox-group v-else class=" contactBottom-container"  v-model="result" ref="checkboxGroup" direction="horizontal">
+			<ul style="width:100%">
+				<li v-for="(item, index) in letterArr" :key="index">
+					<div v-if="searchData[item] && searchData[item].SelectKey">
+						<p class="contactBottomCaps">{{ item }}</p>
+
+					<div class="contactBottomAuthor" v-for="(element) in searchData[item]" :key="element.id" >
+						<div class="contactBottomAuthor" style="width:100%,height:100%" v-if="element.selectKey && element.selectKey.flag"  >
+						<!-- <div  class="contactBottomAuthor" style="width:100%,height:100%"   v-if="true"> -->
+						<van-checkbox class="contactAllcheckbox"   :name="element.id"  />
+								<img class="contactAllImage" src="@/assets/logo.png" />
+								<div class="contactNameAndPost">
+									<p class="contactName">{{ element.cn_name }}</p>
+									<p class="contactPost">{{ element.position }}</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+	
+		</van-checkbox-group>
 		</div>
+		</div>
+			<van-popup v-model="userselect"  :lock-scroll="false" :overlay="false"  position="right" :style="{ width: '100%',height:'100%' }" >
+			<keep-alive >  
+					<router-view  :userData="apiData" :handleSubmit="handleChidlren" :leftClick="routerLeftClick" ></router-view>
+			</keep-alive >  
+			</van-popup>
 	</div>
 </template>
 
 <script>
 import { CheckboxGroup, Toast } from 'vant';
+import BScroll from 'better-scroll';
 export default {
 	name: 'addContact',
 	props:{
@@ -56,11 +94,13 @@ export default {
 	},
 	data() {
 		return {
+			userselect:false,
 			value: '',
 			show: true,
 			checked: false,
 			checkeds: false,
-			apiData:[],
+			result:[],
+			apiData:{},
 			selectUser: [],
 			entryNum:'0',
 			letterArr: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
@@ -84,46 +124,95 @@ export default {
 		this.$request.wechatQuery().then((res)=>{
 			let { data } = res;
 			this.apiData =data;
+			this.$nextTick(()=>{
+			this._BScroll =	new BScroll(this.$refs.contact,{
+				click:true
+			})
+			})
 		})
 	},
 	methods: {
-		checkAllItems() {
-			console.log(this.checked);
+		checkAllItems(bool) {
+			if(bool){
+				this.$refs.checkboxGroup.toggleAll(true)
+
+			}else{
+				this.$refs.checkboxGroup.toggleAll(false)
+			}
+			
 		},
 		checkAllItemsKey(a, b) {
-			console.log(a, b, this.checkeds);
     },
     headerLeft() {
-			this.leftClick()
+		 	this.$router.push({path:'/home',
+            })
+			this.leftClick();
 		},
 		headerRight() {},
 		turnOutContact(){
 			this.$router.push({path:'/addContact/outContact'})
 		},
 		turnOutComponaryBook(){
-			this.$router.push({path:'/addContact/componaryBook'})
+			this.userselect=true;
+			this.$router.push({ path: '/home/addContact/componaryBook' });
 		},
 		onSearch(val) {
-			Toast(val);
+		},
+		handleChidlren(resultId){
+			for(let key in this.apiData){
+				let flag = this.apiData[key].every((e)=>{
+					return !e.selectKey
+				})
+				this.apiData[key].SelectKey  = !flag;
+			}
+			this.apiData = {...this.apiData};
+		},
+		routerLeftClick(){
+			this.userselect =false;
 		},
 	},
+
 	created() {},
+	computed:{
+		searchData(){
+			const _apiData ={};
+			for(let key in this.apiData) {
+				const _arr =[]
+				this.apiData[key].forEach((e)=>{
+					let flag = e.cn_name.indexOf(this.value) != -1
+					if(flag){
+						_arr.push(e)
+					}
+				})
+				if(_arr.length){
+					_apiData[key] = _arr
+				}
+			}
+			for(let key in _apiData){
+				let flag = _apiData[key].every((e)=>{
+					return !e.selectKey
+				})
+				_apiData[key].SelectKey  = !flag;
+			}
+
+			return _apiData
+		}
+	}
 };
 </script>
 
 <style lang="stylus">
   @import "../../common/stylus/mixins.styl";
-
 #addContact
-  background #f7f7f7
+	background #f7f7f7
 	height 100%
+	.headerSearch
+		width 100%
+		.vant-search
+			height 120px 
+			.van-search__content
+				padding 15px 30px
 
-.headerSearch
-   width 100%
-   padding 0 20px
-  .vant-search
-    .van-search__content
-      padding 15px 30px
 .contactSettings
   width 100%
   .contactItems
@@ -158,18 +247,20 @@ export default {
   background #fff
   height 600px
   .contactImg
-    width 200px
+    width 200px 
     height 200px
   .contactOnlyText
     font-size 34px
     color #BEBEBE
 .contactUnix
   width 100%
+  height calc(100% - 88px - 220px - 120px - 87px - 110px)
   .contactAllcheckbox
     height 110px
     padding 0  0 0 32px
-    background #fff
     font-size 34px
+    background #fff
+	width 100%
     .van-checkbox__icon--round
       margin-right 23px
       font-size 34px
@@ -186,8 +277,7 @@ export default {
     .contactPost
       color #b8b8b8
   .contactBottom
-    height 708px
-    overflow-y auto
+    height 100%
     .contactBottomCaps
       padding 10px 32px
       font-size 30px
@@ -197,12 +287,17 @@ export default {
       align-items center
       background-color #fff
       .contactAllcheckbox
-        font-size 34px
+	     	font-size 34px
 </style>
 
 
 <style lang="stylus">
 #addContact
+	.van-checkbox__icon
+		height auto 
+		line-height normal
+		.van-icon
+			font-size 30px
 	.vant-search
 		.van-cell
 			font-size 34px
@@ -224,5 +319,7 @@ export default {
 				color #fff
 		.fe9
 			background #fe943e
-
+	.contactUnix
+		.contactBottom-container
+			height auto
 </style>

@@ -11,7 +11,7 @@
 
          </div>
          <div class="room-time">
-            <div class="time-message" @touchstart.prevent="show=true" @click.prevent="show=true">
+            <div class="time-message"  @click.prevent="show=true">
                   <van-icon name="underway-o" />
                   <span v-if="!currentDate" class="day"> 选择时间 </span>
                   <span  v-else class="day" > {{$moment(currentDate).format('MM')}}月{{$moment(currentDate).format('DD')}}日</span>
@@ -26,7 +26,7 @@
 
          <van-checkbox-group v-model="result">
             <div class="line"></div>
-            <div class="room-container" @touchstart ="console.log(1)" @click="console.log(2)">
+            <div class="room-container"  >
                <van-checkbox name="a">
                   <RoomItem></RoomItem>
                </van-checkbox>
@@ -238,6 +238,7 @@ export default {
          align-items center
          justify-content center
          color #fff
+         font-size: 28px
 
 
 </style>
@@ -276,7 +277,4 @@ export default {
          /* height 80 */
       .van-picker__columns
          transform: translateY(10%)
-.van-checkbox-group
-   position relative
-   z-index 10000
 </style>

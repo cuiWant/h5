@@ -4,7 +4,7 @@
     <div class="footerNav" v-if="!show">
       <div class="footerLeft">
         <span class="footerLeftNum">已选择：{{makeSureNmu}}人</span>
-        <van-icon class="footerLeftIcon" :name="show?'arrow-up':'arrow-down'" @click="atChangeIcon" @touchstart.prevent="atChangeIcon"/>
+        <van-icon class="footerLeftIcon" :name="show?'arrow-up':'arrow-down'" @click="atChangeIcon" />
       </div>
       <van-button class="footerEneter" type="info">确定({{makeSureNmu}}/{{totalNmu}}})</van-button>
     </div>
@@ -13,7 +13,7 @@
       <div class="footerNav">
         <div class="footerLeft">
           <span class="footerLeftNum">已选择：{{makeSureNmu}}人</span>
-          <van-icon class="footerLeftIcon" :name="show?'arrow-up':'arrow-down'" @click="atChangeIcon" @touchstart.prevent="atChangeIcon"/>
+          <van-icon class="footerLeftIcon" :name="show?'arrow-up':'arrow-down'" @click="atChangeIcon" />
         </div>
         <van-button class="footerEneter" type="info">确定({{makeSureNmu}}/{{totalNmu}}})</van-button>
       </div>

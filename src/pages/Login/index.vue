@@ -3,7 +3,7 @@
 		<div class="container">
 			<div class="title-content">
 				<div class="title-text">您好!</div>
-				<div class="title-text" @touchend.prevent="click">欢迎使用会议预约</div>
+				<div class="title-text" @click="click">欢迎使用会议预约</div>
 			</div>
 			<van-form @submit="login">
 			<div class="message-content">
@@ -14,7 +14,6 @@
 						name="username"
 						label="用户名"
 						placeholder="用户名"
-						:rules="[{ required: true, message: '请填写用户名' }]"
 					/>
 				</div>
 				<div class="pwd-container">
@@ -24,12 +23,11 @@
 					name="password"
 					label="密码"
 					placeholder="密码"
-					:rules="[{ required: true, message: '请填写密码' }]"
 				/>
 				</div>
 			</div>
 			<div class="button-content">
-				<van-button round  type="info"  native-type="submit" >登录</van-button>
+				<van-button :disabled="!(username && password)" round  type="info"  native-type="submit" >登录</van-button>
 			</div>
 
 				</van-form >
@@ -71,6 +69,8 @@ export default {
 				// this.$router.push('/entry')
 				this.$router.push('/entry')
 				this.$store.dispatch('recordUser',data)
+				localStorage.setItem('user',JSON.stringify(data));
+				
 					// console.log(res,'res')
 			})
          			//  this.$store.dispatch('recordUser', user)

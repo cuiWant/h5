@@ -8,7 +8,7 @@
       <li v-for="(item, index) in userInfoArr" :key="index">
         <div class="contactBottomAuthor">
           <van-checkbox class="contactAllcheckbox" v-model="item.checkeds" @click.prevent="checkAllItemsKey(userInfoArr[index])" />
-          <div class="contactAllRight" @click="checkContactItems" @touchstart.prevent="checkContactItems(item.name)">
+          <div class="contactAllRight" @click="checkContactItems" >
             <img class="contactAllImage" src="@/assets/logo.png" />
             <p class="contactName">{{ item.name }}</p>
           </div>

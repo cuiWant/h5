@@ -11,7 +11,7 @@
 
          </div>
          <div class="room-time">
-            <div class="time-message" @touchstart.prevent="show=true" @click.prevent="show=true">
+            <div class="time-message"  @click.prevent="show=true">
                   <van-icon name="underway-o" />
                   <span v-if="!currentDate" class="day"> 选择时间 </span>
                   <span  v-else class="day" > {{$moment(currentDate).format('MM')}}月{{$moment(currentDate).format('DD')}}日</span>
@@ -120,8 +120,7 @@ export default {
       },
       mounted(){
 		const { wrapper } = this.$refs;
-   console.log(new BScroll(wrapper))
-            
+      console.log(new BScroll(wrapper))
       },
       methods:{
          headerLeft(){
