@@ -52,14 +52,15 @@
 					<div class="addContacts space-bottom" >
 						<span class="iconfont  addContactsLeft ticobackicon-meeting_type  "></span>
 						<div class="addContactsRight" @click="goPattern(true)" >
-							<span v-if="pattern" class="addContactFont">{{console.log(pattern) || pattern}}</span>
+							<span v-if="pattern" class="addContactFont">{{ pattern}}</span>
 							<span v-else class="addContactFont">请选择会议模式</span>
 
 								<!-- <span v-if="replace" class="addContactFont">{{replace}}</span>
 							<span v-else class="addContactFont">请选择重复次数</span> -->
 						</div>
-							<van-icon v-if="!pattern" class="addContactsIcon" @click="goPattern(true)"  name="arrow" />
-							<van-icon v-else class="addContactsIcon" @click="goPattern(false)"  name="cross" />
+							<!-- <van-icon v-if="!pattern" class="addContactsIcon" @click="goPattern(true)"  name="arrow" /> -->
+							<van-icon  class="addContactsIcon" @click="goPattern(true)"  name="arrow" />
+							<!-- <van-icon v-else class="addContactsIcon" @click="goPattern(false)"  name="cross" /> -->
 					</div>
 					<div class="addContacts space-bottom" >
 						<span class="iconfont  addContactsLeft ticobackicon-refresh  "></span>
@@ -69,7 +70,9 @@
 							 
 						</div>
 							<div>
-							 <van-icon  v-if="!replace" class="addContactsIcon" name="arrow" @click="goReplace(true)"  /><van-icon  @click="goRoom(false)"  v-else class="addContactsIcon" name="cross" />
+							 <!-- <van-icon  v-if="!replace" class="addContactsIcon" name="arrow" @click="goReplace(true)"  /> -->
+							 <van-icon   class="addContactsIcon" name="arrow" @click="goReplace(true)"  />
+							 <!-- <van-icon  @click="goRoom(false)"  v-else class="addContactsIcon" name="cross" /> -->
 							</div> 
 					</div>
 
@@ -81,7 +84,9 @@
 							 
 						</div>
 							<div>
-							 <van-icon  v-if="!remindersText" class="addContactsIcon" @click="touchInfoRemind(true)"  name="arrow" /><van-icon  v-else @click="touchInfoRemind(false)"   class="addContactsIcon" name="cross" />
+							 <!-- <van-icon  v-if="!remindersText" class="addContactsIcon" @click="touchInfoRemind(true)"  name="arrow" /> -->
+							 <van-icon   class="addContactsIcon" @click="touchInfoRemind(true)"  name="arrow" />
+							 <!-- <van-icon  v-else @click="touchInfoRemind(false)"   class="addContactsIcon" name="cross" /> -->
 							</div> 
 					</div>
 				<div class="addContacts space-bottom" >
@@ -92,7 +97,9 @@
 							 
 						</div>
 							<div>
-							 <van-icon  v-if="!detail" class="addContactsIcon" @click="goDetail(true)"  name="arrow" /><van-icon @click="goDetail(false)"   v-else class="addContactsIcon" name="cross" />
+							 <!-- <van-icon  v-if="!detail" class="addContactsIcon" @click="goDetail(true)"  name="arrow" /> -->
+							 <van-icon   class="addContactsIcon" @click="goDetail(true)"  name="arrow" />
+							 <!-- <van-icon @click="goDetail(false)"   v-else class="addContactsIcon" name="cross" /> -->
 							</div> 
 					</div>
 				</div>
@@ -122,19 +129,26 @@
 				<van-datetime-picker v-else @confirm="dateHandle_end" v-model="endTime" type="time" :min-date="minDate_end" visible-item-count="5" item-height ="0.8rem" :filter="filter" :formatter="formatter" @cancel="dateHandle" />
 			</div>
 		</van-popup>
+		<Alert :hintText="hintText"></Alert>
 	</div>
 </template>
 
 <script>
+import Alert from '@/components/Alert'
 import BScroll from 'better-scroll';
-import {Toast} from 'vant'
+import {Toast} from 'vant';
 const showRouter = ['detail','replace','room','addContact']
-let { pathname }   =window.location
+let { pathname }   = window.location;
 let bool  = !!showRouter.find((e)=>{
 	return pathname.indexOf(e) !== -1
 })
+
 const currentDate = new Date(Date.now());
+
 export default {
+	components:{
+		Alert
+	},
 	data() {
 		return {
 			isTimeStart:true,
@@ -204,7 +218,6 @@ export default {
 		// 	this.firstFlag = true;
 		// 	return
 		// }
-		console.log(111)
 
 		this.show =false;
 		this.footerRouterShow =false;
@@ -300,7 +313,8 @@ export default {
 		},
 		touchInfoRemind(bool) {
 			if(bool){
-				this.$router.push({ path: '/infoRemind' });
+				this.footerRouterShow =true
+				this.$router.push({ path: '/home/infoRemind' });
 			}else{
 				this.handleClose({
 					allData:['reminders','reminders_time'],
@@ -389,6 +403,11 @@ export default {
 				
 		}
 	},
+	computed:{
+		hintText(){
+			return [1,2]
+		}
+	}
 };
 </script>
 

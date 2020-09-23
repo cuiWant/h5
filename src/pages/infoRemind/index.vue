@@ -29,6 +29,10 @@
 
 <script>
 export default {
+	props:{
+         leftClick:Function,
+
+	},
 	data() {
 		return {
 			checkIndex: 0,
@@ -58,17 +62,20 @@ export default {
 			this.checkNum = index;
 		},
 		headerLeft() {
+			this.leftClick()
 			this.$router.go(-1);
 		},
 		headerRight() {
 			let current = this.checkData[this.checkIndex];
+			this.leftClick()
 			let obj = {
 				reminders_time:current.value,
 				reminders:this.checkMessage[this.checkNum].value,
 				text:`${current.text},${this.checkMessage[this.checkNum].text}`,
 				key:'remindersText'
 			}
-			this.$router.push({path:'/home',query:obj});
+			console.log(obj,'obj')
+		this.$router.push({path:'/home',query:obj});
 		},
 	},
 };

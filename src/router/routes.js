@@ -57,6 +57,12 @@ export default [
 				component:Pattern
 			},
 			{
+				path: '/home/infoRemind',
+				component: InfoRemind,
+		
+		
+			},
+			{
 				path: '/home/addContact',
 				component: AddContant,
 				children:[
@@ -68,20 +74,11 @@ export default [
 			}
 		]
 	},
-	{
-		path:'/allmeeting',
-		component:AllMeeting
-	},
 // 	{
 // 		path: '/addContact',
 // 		component: AddContant,
 // 	},
-// 	{
-// 		path: '/infoRemind',
-// 		component: InfoRemind,
-
-
-// 	},
+	,
 // {
 // 	path:'/addContact/outContact',
 // 	component:OutContact,
