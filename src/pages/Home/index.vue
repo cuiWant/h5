@@ -23,12 +23,11 @@
 						<div class="addContacts border-bottom" >
 						<span class="iconfont  addContactsLeft ticobackicon-meeting_organizer  "></span>
 						<div class="addContactsRight">
-							<span class="addContactFont">林小园
+							<span class="addContactFont">我
 
 								<van-tag class='tag' type="primary">组织人</van-tag>
 							</span>
 						</div>
-							<van-icon class="addContactsIcon" @click="touchAddContact"  name="arrow" />
 					</div>
 					<div class="addContacts space-bottom" >
 						<span class="iconfont  addContactsLeft ticobackicon-meeting_person  "></span>
@@ -113,7 +112,6 @@
 		<Nav v-if="(navData.some(e=>e.status))" :config="navData" :click="handleNavClick"></Nav>
 		<van-popup  :lock-scroll="false" :overlay="false" v-model="footerRouterShow" position="right" :style="{ width: '100%',height:'100%' }" >
 		<keep-alive >  
-			
 			<router-view :handleSubmit="handleChidlren" :leftClick="routerLeftClick" ></router-view>
 		</keep-alive >  
 		
@@ -129,7 +127,7 @@
 				<van-datetime-picker v-else @confirm="dateHandle_end" v-model="endTime" type="time" :min-date="minDate_end" visible-item-count="5" item-height ="0.8rem" :filter="filter" :formatter="formatter" @cancel="dateHandle" />
 			</div>
 		</van-popup>
-		<Alert :hintText="hintText"></Alert>
+		<Alert ref="alert" :hintText="hintText"></Alert>
 	</div>
 </template>
 
@@ -138,6 +136,12 @@ import Alert from '@/components/Alert'
 import BScroll from 'better-scroll';
 import {Toast} from 'vant';
 const showRouter = ['detail','replace','room','addContact']
+const requireArr= [{
+	text:'联系人',
+	showText:"contact",
+	apiData:'attendee_id'
+},'']
+
 let { pathname }   = window.location;
 let bool  = !!showRouter.find((e)=>{
 	return pathname.indexOf(e) !== -1
@@ -146,6 +150,7 @@ let bool  = !!showRouter.find((e)=>{
 const currentDate = new Date(Date.now());
 
 export default {
+	// name:'Home',
 	components:{
 		Alert
 	},
@@ -205,13 +210,15 @@ export default {
 			stopPropagation:true,
             preventDefault: true,
 		});
-
+		this.show =false;
+		this.footerRouterShow =false;
 		// let timer = setInterval(() => {
 		// 	console.log(1);
 		// }, 1000);
 		// this.$on('hook:beforeDestory', function() {
 		// 	clearInterval(timer);
 		// });
+
 	},
 	activated(){
 		// if( !this.firstFlag ){
@@ -219,16 +226,16 @@ export default {
 		// 	return
 		// }
 
-		this.show =false;
-		this.footerRouterShow =false;
-		let { query} =this.$route;
-		let oldData = this.allData;
-		let { key,text } = query;
-		this.allData={
-			...oldData,
-			...query
-		}
-		this[key] = text;
+	
+		// let { query} =this.$route;
+		// let oldData = this.allData;
+		// let { key,text } = query;
+		// this.allData={
+		// 	...oldData,
+		// 	...query
+		// }
+		// this.remindersText =1
+		// this[key] = text;
 	},
 	watch:{
 		room(value,oldvalue){
@@ -271,10 +278,9 @@ export default {
 			}
 		},
 		goRoom(bool){
-			this.room = '1'
 			if(bool){
 				this.footerRouterShow =true
-				this.$router.push({ path: '/home/replace' });
+				this.$router.push({ path: '/home/room' });
 			}else{
 				this.handleClose({
 					allData:['interval_flag','replaceCount'],
@@ -324,20 +330,20 @@ export default {
 		},
 		
 		//表单提交
-		onSubmit() {
-			console.log(this.allData,'alldata')
-		},
 		headerLeft() {
 			this.$router.push('/entry')
 		},
-		headerRight() {},
+		headerRight() {
+			// console.log(this.allData,'alldata')
+			this.$router.push('/allmeeting')
+			// this.$refs.alert.showFn()
+		},
 		dateShow(bool) {
 			this.isTimeStart = bool;
 			this.show = true;
 		},
 		dateHandle_end(value){
 				if (value) {
-				console.log(value,'xx')
 				this.currentDate = value;
 			}
 			this.show = false;
@@ -352,8 +358,6 @@ export default {
 			this.show = false;
 			// console.log(value);
 		},
-
-
 
 
 		formatter(type, val) {
@@ -528,8 +532,6 @@ export default {
 				padding 0 0 0 15px
 				.addContactFont
 					color #B8B8B8
-					position relative
-
 				.tag	
 					position absolute
 					width: 81px;

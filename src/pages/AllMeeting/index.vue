@@ -1,277 +1,145 @@
 <template>
  <div class="room-wrapper">
-		<Header :leftClick="headerLeft" :rightClick="headerRight" :title="'会议室'" rightText="完成"></Header>
-      <div class="room-header">
-         <div class="room-search">
-               <van-search
-               v-model="value"
-               shape="round"
-               placeholder="请输入搜索关键词"
-               />
-
-         </div>
-         <div class="room-time">
-            <div class="time-message"  @click.prevent="show=true">
-                  <van-icon name="underway-o" />
-                  <span v-if="!currentDate" class="day"> 选择时间 </span>
-                  <span  v-else class="day" > {{$moment(currentDate).format('MM')}}月{{$moment(currentDate).format('DD')}}日</span>
-                  <!-- <span  v-else class="day" > {{Date(currentDate).format('HH:mm')}} </span> -->
-                  <span  v-if="currentDate" class="week" >{{$moment(currentDate).format('dddd')}}</span>
-                  <span class="iconfont ticobackicon-unfold_alarm"></span>
+		<Header :leftClick="headerLeft" :rightClick="headerRight" :title="'全部会议'" ></Header>
+      <div class="meeting-wrapper" ref="wrapper">
+         <div class="meeting-content">
+            <div  class="meeting-list" v-for="(item,index) in meetingData" :key="index">
+               <div class="time">{{index}}</div>
+               <div class="item" v-for="(el,i) in item.data " :key="i">
+                  <div class="item-title">{{el.theme}}</div>
+                  <div class="item-time">{{ el.start_time.split(' ')[1]}}-{{el.end_time.split(' ')[1]}}</div>
+                  <div class="item-user">
+                     <div>发起人:{{el.meeting_host_name}}</div>
+                  </div>
+               </div>
             </div>
          </div>
       </div>
-      <div  ref="wrapper" class="room-list">
-         <div    class="room-list-wrapper"> 
-         <van-checkbox-group v-model="result">
-            <div class="line"></div>
-            <div class="room-container">
-               <van-checkbox name="a">
-                  <RoomItem></RoomItem>
-               </van-checkbox>
-               <!-- <van-checkbox name="a">
-                  <RoomItem></RoomItem>
-               </van-checkbox> -->
-               </div>
-                 <div class="line"></div>
-            <div class="room-container">
-               <van-checkbox name="a">
-                  <RoomItem></RoomItem>
-               </van-checkbox>
-               <!-- <van-checkbox name="a">
-                  <RoomItem></RoomItem>
-               </van-checkbox> -->
-               </div>
-                 <div class="line"></div>
-            <div class="room-container">
-               <van-checkbox name="a">
-                  <RoomItem></RoomItem>
-               </van-checkbox>
-               <!-- <van-checkbox name="a">
-                  <RoomItem></RoomItem>
-               </van-checkbox> -->
-               </div>
-                 <div class="line"></div>
-            <div class="room-container">
-               <van-checkbox name="a">
-                  <RoomItem></RoomItem>
-               </van-checkbox>
-               <!-- <van-checkbox name="a">
-                  <RoomItem></RoomItem>
-               </van-checkbox> -->
-               </div>
-
-         </van-checkbox-group>
-         </div>
-      </div>
-      <div class="footer">
-         <div class="text-container">
-            <span class="text">
-               以选择: 0个
-            </span> 
-            <van-icon name="arrow-up" />
-            </div>
-            
-         <div class="btn">
-            确定(0/120)
-         </div>
-      </div>
-      	<van-popup  v-model="show"
-         class="time-popup"
-         position="bottom"
-         closeable
-         :style="{ height: '34%' }">
-			
-			<div class="content">
-             <van-datetime-picker
-                  v-model="currentDate"
-                  type="date"
-                  :min-date="minDate"
-                  visible-item-count="5" item-height ="0.8rem" 
-                  :formatter="formatter"
-                  @confirm="dateHandle"
-                  @cancel="dateHandle"
-                  />
-			</div>
-		</van-popup>
-     
  </div>
 </template>
  
 <script>
+import { Toast } from 'vant'
 import BScroll from 'better-scroll';
-import RoomItem from'@/components/RoomItem';
 export default {
       props:{
          leftClick:Function,
       },
-      components:{
-         RoomItem,
-      },
       data () {
       return {
-         minDate:new Date(),
-         currentDate:new Date(),
-         name:'room',
-         result:[],
-         show:false,
-         value:''
+         page_num:1,
+         page_size:10,
+         meetingData:{},
+         flag:true,
+         endData:true
       }
       },
       mounted(){
-		const { wrapper } = this.$refs;
-      console.log(new BScroll(wrapper))
+         this.request().then(()=>{
+            this._BScroll.on('scrollEnd',()=>{
+               if(!this.endData){
+                  return 
+               }
+               if(this.flag){
+                  this.flag = false;
+                  this.request().then(()=>{
+                     this.flag =true;
+                  })
+               }
+            });
+         })
       },
       methods:{
          headerLeft(){
-               this.$router.push({path:'/home',
-            })
-            this.leftClick()
+            this.$router.push('/entry')
          },
          headerRight(){
-            this.leftClick()
-            this.$router.push({path:'/home',
-               query:{
-                 key:this.name,
+
+         },
+         request(){
+            let {page_num,page_size}  = this
+            return this.$request.meetingList({
+               page_num,
+               page_size
+            }).then((res)=>{
+               this.$loading.close()
+               if(res.success){
+                  if(res.data.result.length === 0){
+                     this.endData = false;
+                     Toast.success('全部会议展示完毕')
+                  }
+                  this.page_num +=1;
+                  res.data.result.forEach((e)=>{
+                     let key = e.start_time.split(' ')[0]
+                     if(this.meetingData[key]){
+                        this.meetingData[key].data.push(e)
+                     }else{
+                        this.meetingData[key] ={
+                           data:[e]
+                        }
+                     }
+                  })
+                  this.meetingData = {...this.meetingData}
+                     this.$nextTick(()=>{
+                        if(this._BScroll){
+                              this._BScroll.refresh();
+                        }else{
+                           this._BScroll = new BScroll(this.$refs.wrapper,{
+                              click:true
+                           })
+                        }
+                     })
                }
             })
-         },
-      formatter(type, val) {
-			if (type === 'year') {
-				return `${val}年`;
-			} else if (type === 'month') {
-				return `${val}月`;
-			} else if (type === 'day') {
-				return `${val}日`;
-			} else if (type === 'hour') {
-				return `${val}时`;
-			} else if (type === 'minute') {
 
-					return `${val}分`;
-			}
-
-			return val;
-      },
-      dateHandle(value){
-         this.show = false
-         if(value){
-               this.currentDate = value
          }
       }
-      }
-
 }
 </script>
  
 <style scoped lang = "stylus">
-@import "../../common/stylus/mixins.styl";
-.room-wrapper
-   height  100%
-   .room-header
-      height 183px
-      .room-time
-         height 65px
-         background yellow
-         padding 0 32px
-         display flex
-         align-items center
-         .time-message 
-            font-size 30px
-            color #333333
-            text-align center
-            display flex
-            align-items center
-            .iconfont  
-               font-size 10px
-            .day
-               margin-left 20px
-               margin-right 0.3em
-            .week
-               margin-right 25px
-            
-      .room-search
-         height 118px
-         display flex
-         align-items center
-         justify-content center
-   .room-list
-   
-      /* position relative */
-      height calc(100% - 88px - 98px - 183px )
-      overflow hidden
-      background aqua
-      /* display flex
-      justify-content center */
-      .room-list-wrapper
-      .room-container
-         /* padding 0px 28px  0px 31px */
-         background #fff
-      .line
-            height 21px
-            background pink
-   .footer
-      height 98px      
-      display flex
-      justify-content space-between
-      align-items center
-      padding 0 31px
-      top-border-1px(#f7f7f7)
-      .text-container 
-         color #1890ff
-         align-items center
-         justify-content center
-         font-size 28px
-         /* .text  */
-         .van-icon 
-            padding-top 10px
-            font-weight bold 
-      .btn
-         width 204px
-         height 61px
-         background #1890ff
-         border-radius 4px
-         display flex
-         align-items center
-         justify-content center
-         color #fff
-
-
-</style>
-<style lang="stylus">
-.room-list
-   .van-checkbox
-      height 284px
-      padding-top 30px 
-      align-items flex-start
-      overflow hidden
-      .van-checkbox__icon
-         font-size 32px 
-      .van-checkbox__label
-         height 100%
-         width 100%
-.room-header
-   .van-search
-         width 100%
-         height 78px
-         padding  0 32px
-         /* .van-field__body */
-         .van-cell
-            height 78px 
-            font-size 34px  
-            line-height 78px
-            .van-icon
-               font-size 32px
-         .van-search__content
-            padding-left 30px
-.content 
-   .van-picker
+   .room-wrapper
       height 100%
-      .van-picker
-         .van-picker-column__wrapper
-            font-size 30px
-         /* height 80 */
-      .van-picker__columns
-         transform: translateY(10%)
-.van-checkbox-group
-   height 10000px !importent
+      .meeting-wrapper
+         height calc(100% - 88px)
+         display flex
+         justify-content center
+         background #f7f7f7
+         .meeting-content
+            display table
+            background #f7f7f7
+            .meeting-list
+               
+               display flex
+               align-items center
+               flex-direction column
+               .time
+                  height 80px
+                  display flex
+                  justify-content center
+                  align-items center
+                  font-size 28px
+                  text-align center
+                  color #666
+               .item
+                  height 259px
+                  background #fff
+                  width 686px
+                  display flex
+                  flex-direction column
+                  justify-content space-around
+                  padding-left 30px 
+                  border-radius 20px
+                  margin-bottom 30px
+                  &:nth-last-child(1)
+                     margin 0
+                  .item-title
+                     color: #333333
+                     font-size: 34px
+                  .item-time
+                     color: #333333
+                     font-size: 34px
+                  .item-user
+                     color: #666666
+                     font-size 28px
 </style>

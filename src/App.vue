@@ -1,6 +1,6 @@
 <template>
 	<div id="app">
-		<keep-alive >  
+		<keep-alive include="Home" >  
 			<router-view></router-view>
 		</keep-alive >  
 		<!-- <Form ref= "header"> </Form>	 -->
@@ -44,7 +44,8 @@ body .van-toast
 		font-size 25px
 .van-popup
 	height 60px
-	font-size 28px
-	 	
+	font-size 28px 
+.van-notify 
+		font-size 28px !important
 
 </style>

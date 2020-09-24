@@ -74,10 +74,10 @@ export default [
 			}
 		]
 	},
-// 	{
-// 		path: '/addContact',
-// 		component: AddContant,
-// 	},
+	{
+		path: '/allmeeting',
+		component: AllMeeting,
+	},
 	,
 // {
 // 	path:'/addContact/outContact',

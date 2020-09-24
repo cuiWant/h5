@@ -18,7 +18,7 @@ export default {
 	props: {
 		title: String,
 		leftClick: Function,
-		rightClick: Function,
+		rightClick: Function | undefined,
 		rightText: String,
 	},
 	data() {

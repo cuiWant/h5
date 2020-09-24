@@ -3,7 +3,10 @@
      <ul class="scale-content"   >
                 <li class="item " v-for="(element,i) in scaleData" :key="element.time">
                     <div class="block-container">
-                        <div  :class="`block  ${element.activeIndex[index] ? 'active' :''}` "  v-for="(item,index) in itemNum" :key="item"></div>
+                        <div  :class="`block ` "  v-for="(item,index) in itemNum" :key="item">
+                            <div v-if ="!element.activeIndex[index]" class='white'></div>
+                            <div v-else class='gray'></div>
+                        </div>
                     </div>
                     <div class="count">
                         <span :class=" element.time > 9 ? 'left' : ''">
@@ -46,28 +49,30 @@ export default {
     config:[],
     itemNum:itemNum,
     scaleData,
-    testArr:[{
-        end_time: "2020-09-20 14:45:18",
-        start_time: "2020-09-20 12:15:15"
-    }]
+    // testArr:[{
+    //     end_time: "2020-09-20 14:45:18",
+    //     start_time: "2020-09-20 12:15:15"
+    // }]
  }
  },
  mounted(){
-    //  new BScroll(this.$refs.scaleRef,{
-    //     scrollX:true
-    //  });
-    this.handleActive()
-
+    this.handleActive();
  },
  updated(){
      
  },
  methods:{
         handleActive(){
-            function addActiveFlag (bool){
+            const scaleData= []
 
-            }
-            this.testArr.forEach((e)=>{
+            for (let i = 0; i <= 10; i++) {
+                scaleData[i] = {
+                    time:i + addTime,
+                    activeIndex:[]
+                }
+                    
+                }
+            this.useTime.forEach((e)=>{
                 let start = this.$moment(e.start_time).format('HH:mm')
                 let end = this.$moment(e.end_time).format('HH:mm')
                 let [startIndex,startMinute] = start.split(':');
@@ -75,9 +80,12 @@ export default {
                 for (let i  = Number(startIndex); i < Number(endIndex); i++ ){
                     let count = this.count || 2;
                     let index = i-addTime;  //真正的下表
-                    let handleArr = this.scaleData[index].activeIndex;
+                    if(!scaleData[index]){
+                        break
+                    } 
+                    let handleArr = scaleData[index].activeIndex;
                     if(i === startIndex ){
-                        let bool = this.scaleData[index] - 15 > 0 
+                        let bool = scaleData[index] - 15 > 0 
                         if(bool ){
                             for(let i = 0; i< count; i++){
                                handleArr[i] = true
@@ -91,7 +99,7 @@ export default {
                         //     handleArr[i] = true
                         // }
                     }else if( i === endIndex){
-                    let bool = this.scaleData[index] - 15 > 0 
+                    let bool = scaleData[index] - 15 > 0 
                         if(!bool ){
                             for(let i = 0; i< count; i++){
                                handleArr[i] = true
@@ -111,8 +119,14 @@ export default {
                     
                 }
            })
-           this.itemNum =[...this.itemNum]
+           this.scaleData =scaleData;
+           this.itemNum =[...this.itemNum];
         } 
+ },
+ watch:{
+     useTime(){
+        this.handleActive();
+     }
  }
 }
 </script>
@@ -157,8 +171,15 @@ export default {
                 }
                 .end
                     margin-left: 25px;
-
-                    
+        .white
+            height 100%
+            width 100% 
+            background #fff 
+        .gray
+            height 100%
+            width 100% 
+            background #eff2f5
+                
 
             
 </style>

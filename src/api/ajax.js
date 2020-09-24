@@ -16,7 +16,7 @@ axios.interceptors.request.use(config => {
 	if(login === true){
 		return config
 	}else{
-		let { user ={}} = store.state.user;
+		let { user ={},token} = store.state.user;
 		if(!user.dept_id) {
 			router.push('/login')
 			return Promise.reject('请登录');
@@ -24,7 +24,8 @@ axios.interceptors.request.use(config => {
 		// if()
 		config.headers ={
 			dept_id:user.dept_id,
-			token:user.token
+			token: token,
+			access_token: token
 		}
 	}
 	// 如果请求配置标识了需要携带token

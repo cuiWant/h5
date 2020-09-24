@@ -36,11 +36,16 @@ export default {
  }
  },
  methods:{
-         show(){
+    showFn(){
          this.show = true;
      },
-     close(){
-         this.show = false;
+    closeFn(){
+       
+       this.show = false;
+    },
+    close(){
+       
+       this.show = false;
      }
  }
 }

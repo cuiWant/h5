@@ -30,6 +30,7 @@
 <script>
 export default {
 	props:{
+         handleSubmit:Function,
          leftClick:Function,
 
 	},
@@ -74,8 +75,8 @@ export default {
 				text:`${current.text},${this.checkMessage[this.checkNum].text}`,
 				key:'remindersText'
 			}
-			console.log(obj,'obj')
-		this.$router.push({path:'/home',query:obj});
+			this.handleSubmit(obj)
+			// this.$router.push({path:'/home',query:obj});
 		},
 	},
 };

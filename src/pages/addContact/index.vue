@@ -6,7 +6,8 @@
 		</div>
 		<div class="contactSettings">
 			<ul class="contactItems">
-				<li class="contactItem" @click="turnOutContact" >
+				<!-- <li class="contactItem" @click="turnOutContact" > -->
+				<li class="contactItem" :style="{opacity:0.3}"  >
 					<div class="icon-container">
 						<span class="iconfont ticobackicon-external_contact"></span>
 					</div>
@@ -40,7 +41,9 @@
 						<div class="contactBottomAuthor" style="width:100%,height:100%" v-if="element.selectKey && element.selectKey.flag"  >
 						<!-- <div  class="contactBottomAuthor" style="width:100%,height:100%"   v-if="true"> -->
 						<van-checkbox class="contactAllcheckbox"   :name="element.id"  />
-								<img class="contactAllImage" src="@/assets/logo.png" />
+								<div class="contactAllImage">
+									<span class="iconfont ticobackicon-avatar"></span>
+								</div>
 								<div class="contactNameAndPost">
 									<p class="contactName">{{ element.cn_name }}</p>
 									<p class="contactPost">{{ element.position }}</p>
@@ -59,10 +62,13 @@
 						<p class="contactBottomCaps">{{ item }}</p>
 
 					<div class="contactBottomAuthor" v-for="(element) in searchData[item]" :key="element.id" >
-						<div class="contactBottomAuthor" style="width:100%,height:100%" v-if="element.selectKey && element.selectKey.flag"  >
+						<div class="contactBottomAuthor" style="width:100%,height:100%" v-if="element.selectKey && element.selectKey.flag"   >
 						<!-- <div  class="contactBottomAuthor" style="width:100%,height:100%"   v-if="true"> -->
 						<van-checkbox class="contactAllcheckbox"   :name="element.id"  />
-								<img class="contactAllImage" src="@/assets/logo.png" />
+								<!-- <img class="contactAllImage" src="@/assets/logo.png" /> -->
+								<div class="contactAllImage">
+									<span class="iconfont ticobackicon-avatar"></span>
+								</div>
 								<div class="contactNameAndPost">
 									<p class="contactName">{{ element.cn_name }}</p>
 									<p class="contactPost">{{ element.position }}</p>
@@ -77,9 +83,9 @@
 		</div>
 		</div>
 			<van-popup v-model="userselect"  :lock-scroll="false" :overlay="false"  position="right" :style="{ width: '100%',height:'100%' }" >
-			<keep-alive >  
-					<router-view  :userData="apiData" :handleSubmit="handleChidlren" :leftClick="routerLeftClick" ></router-view>
-			</keep-alive >  
+			<keep-alive>  
+				<router-view ref="_route" :letterArr="letterArr"  :userData="apiData" :handleSubmit="handleChidlren" :leftClick="routerLeftClick" ></router-view>
+			</keep-alive>  
 			</van-popup>
 	</div>
 </template>
@@ -90,7 +96,8 @@ import BScroll from 'better-scroll';
 export default {
 	name: 'addContact',
 	props:{
-         leftClick:Function,
+		 leftClick:Function,
+		 handleSubmit:Function
 	},
 	data() {
 		return {
@@ -102,8 +109,9 @@ export default {
 			result:[],
 			apiData:{},
 			selectUser: [],
+			allData:[],
 			entryNum:'0',
-			letterArr: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
+			letterArr: [],
 			dataArr: [
 				{
 					checkeds: true,
@@ -122,8 +130,12 @@ export default {
 	},
 	mounted(){
 		this.$request.wechatQuery().then((res)=>{
-			let { data } = res;
+			let { data={} } = res;
 			this.apiData =data;
+			for(let key in data){
+				this.letterArr.push(key)
+				this.allData.push(...data[key])
+			}
 			this.$nextTick(()=>{
 			this._BScroll =	new BScroll(this.$refs.contact,{
 				click:true
@@ -148,7 +160,26 @@ export default {
             })
 			this.leftClick();
 		},
-		headerRight() {},
+		headerRight() {
+			let mapData= this.mapData
+			let _result = this.result.map((id)=>{
+				let current =mapData[id];
+				let str = `${id},${current.mobile || 'null'},${current.cn_name}${current.email ? ','+ current.email :''}`
+				return str
+			});
+			let text ="";
+			if(_result.length > 0){
+				let name =mapData[this.result[0]].cn_name;
+				text = _result.length > 1 ? `${name}等${_result.length}人` : name
+			}
+			let submitObj = {
+				key:'contact',
+				text,
+				attendee_id:_result
+			};
+			this.handleSubmit(submitObj)
+			this.leftClick()
+		},
 		turnOutContact(){
 			this.$router.push({path:'/addContact/outContact'})
 		},
@@ -162,6 +193,13 @@ export default {
 			for(let key in this.apiData){
 				let flag = this.apiData[key].every((e)=>{
 					return !e.selectKey
+				})
+
+				// 添加进来的 变成已选中
+				this.apiData[key].forEach((e)=>{
+					if(e.selectKey){
+						this.result.push(e.id)
+					}
 				})
 				this.apiData[key].SelectKey  = !flag;
 			}
@@ -196,7 +234,14 @@ export default {
 			}
 
 			return _apiData
-		}
+		},
+		mapData(){
+			return this.allData.reduce((pre,e)=>{
+				pre[e.id] = e;
+				return pre
+			},{})
+    }
+
 	}
 };
 </script>
@@ -322,4 +367,14 @@ export default {
 	.contactUnix
 		.contactBottom-container
 			height auto
+
+
+.contactAllImage
+	display flex 
+	justify-content center 
+	align-items center
+	background #f2f2f8
+	color #d8d9db
+	.iconfont
+		font-size 38px
 </style>

@@ -20,8 +20,10 @@
 						<p class="contactBottomCaps">{{ item }}</p>
 						<div class="contactBottomAuthor" v-for="(element) in apiData[item]" :key="element.id" >
 					    <van-checkbox class="contactAllcheckbox"  :name="element.id"  />
-							<img class="contactAllImage" src="@/assets/logo.png" />
-							<div class="contactNameAndPost">
+							 <div class="contactAllImage">
+                        <span class="iconfont ticobackicon-avatar"></span>
+                </div>
+              <div class="contactNameAndPost">
 								<p class="contactName">{{ element.cn_name }}</p>
 								<p class="contactPost">{{ element.position }}</p>
 							</div>
@@ -37,7 +39,9 @@
 						<p class="contactBottomCaps">{{ item }}</p>
 						<div class="contactBottomAuthor" v-for="(element) in searchData[item]" :key="element.id" >
 					    <van-checkbox class="contactAllcheckbox"  :name="element.id"  />
-							<img class="contactAllImage" src="@/assets/logo.png" />
+							 <div class="contactAllImage">
+                        <span class="iconfont ticobackicon-avatar"></span>
+                      </div>
 							<div class="contactNameAndPost">
 								<p class="contactName">{{ element.cn_name }}</p>
 								<p class="contactPost">{{ element.position }}</p>
@@ -64,7 +68,7 @@
     	<van-popup v-model="selectUser"  :lock-scroll="false" :overlay="false"  position="bottom" :style="{ width: '100%',height:'100%' }" >
       <div class="select-user-wrapper">
         <Header ref="header" :leftClick="_headerLeft" :rightClick="_headerRight" :title="'已选参会人'" :rightText="``"></Header>
-        <div class="select-user-list">
+        <div class="select-user-list" ref="selectUser" >
             <div class="user-container">
                 <div v-for="(item,index) in result" :key="index" class="user-item">
                   <div class="user-left" @click="_delete(index)">
@@ -72,7 +76,9 @@
                   </div>
                   <div class="user-right">
                     <div class="avatar">
-                      <img src="@/assets/logo.png" alt="">
+                      <div class="contactAllImage">
+                        <span class="iconfont ticobackicon-avatar"></span>
+                      </div>
                     </div>
                     <div class="text">
                       <div class="name"> {{mapData[item].cn_name}}</div>
@@ -96,6 +102,7 @@ export default {
     leftClick:Function,
     handleSubmit:Function,
     userData:Object,
+    letterArr:Array
   },
   name:'componaryBook',
   data(){
@@ -110,8 +117,7 @@ export default {
     return {
       index:'0',
       result:[],
-      selectUser:false,  //默认true
-			letterArr: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
+      selectUser:false,
 			apiData:this.userData || [],
       checked: false,
       value:'',
@@ -172,6 +178,20 @@ export default {
   watch:{
     result(){
     },
+    selectUser(){
+         if(!this.selectUser){
+               return
+            }
+            setTimeout(()=>{
+               if(this._selectBscroll){
+                  this._selectBscroll.refresh()
+                  return
+               }
+              this._selectBscroll = new BScroll(this.$refs.selectUser,{
+                click:true
+              })
+            },500)
+    }
 
   },
   computed:{
@@ -322,10 +342,12 @@ export default {
               .avatar                                                                         
                   height 84px
                   width 84px
-                  display flex
                   margin-right 27px
                   // align-items center
                   // justify-content center
+                  .contactAllImage
+                    width 100%
+                    height 100%
                   img   
                     height 100%
                     width 100%

@@ -22,8 +22,31 @@ function wechatQuery(data={
     })
 }
 
-
+function confirmMeeting(data){
+    return ajax({
+        method:'POST',
+        data,
+        url:`${prefix}/backgroundinterface/meeting_appointment/findXinheTemporary`
+    })
+}
+function findMeeting(data){
+    return ajax({
+        method:'POST',
+        data,
+        url:`${prefix}/backgroundinterface/meeting_appointment/findMeetingRoomAppointment`,
+    })
+}
+function meetingList(data){
+    return ajax({
+        method:'POST',
+        data,
+        url:`${prefix}/backgroundinterface/meeting_appointment/list`,
+    })
+}
 export default {
     login,
-    wechatQuery
+    wechatQuery,
+    confirmMeeting,
+    findMeeting,
+    meetingList
 }

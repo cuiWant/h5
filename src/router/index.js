@@ -12,15 +12,15 @@ const router = new VueRouter({
 });
 
 
-const exclude = ['login']
+const exclude = ['login','entry']
 router.beforeEach((to, from, next) => {
 	// Vue.prototype.$loading.show()	
 
 	// setTimeout(()=>{
 	// Vue.prototype.$loading.close()	
-	next()
 	// },500)
-	return 
+	// next()
+	// return 
 
 
 	let bool = !!exclude.find((e)=>{
