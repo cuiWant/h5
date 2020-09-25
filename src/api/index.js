@@ -43,10 +43,19 @@ function meetingList(data){
         url:`${prefix}/backgroundinterface/meeting_appointment/list`,
     })
 }
+
+function makeMeeting(data){
+    return ajax({
+        method:'POST',
+        data,
+        url:`${prefix}/backgroundinterface/meeting_appointment/appointment`,
+    })
+}
 export default {
     login,
     wechatQuery,
     confirmMeeting,
     findMeeting,
-    meetingList
+    meetingList,
+    makeMeeting 
 }

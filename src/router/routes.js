@@ -16,6 +16,7 @@ import Detail from "@/pages/Home/Detail"
 import Replace from "@/pages/Home/Replace"
 import Pattern from "@/pages/Home/Pattern"
 
+import AllMeetingDetail from '@/pages/AllMeeting/Detail';
 
 // const User = () => import('@/pages/User');
 // const Entry = () => import('@/pages/Entry');
@@ -77,6 +78,13 @@ export default [
 	{
 		path: '/allmeeting',
 		component: AllMeeting,
+		children:[
+			{
+				name:'detail',
+				path:'/allmeeting/detail',
+				component:AllMeetingDetail
+			}
+		]
 	},
 	,
 // {

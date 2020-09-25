@@ -4,7 +4,7 @@ function resolve(dir) {
 }
 
 module.exports = {
-	// publicPath:'./',
+	// publicPath:'./', //  开发不要打开
 	chainWebpack: config => {
 		config.resolve.alias.set('@', resolve('./src')).set('components', resolve('./src/components'));
 		//set第一个参数：设置的别名，第二个参数：设置的路径
@@ -22,9 +22,13 @@ module.exports = {
 				}
 			},
 			// '/api': {
-			// target: 'http://139.196.140.161:12347',
+			// target: 'http://127.0.0.1:12347',
 			// changeOrigin: true,		
 			// },
+			// '/api': {
+			// 	target: 'http://139.196.140.161:12347',
+			// 	changeOrigin: true,		
+			// 	},
 			// '/api': {
 			// 	//这里最好有一个 /
 			// 	target: 'http://localhost:4000', // 后台接口域名

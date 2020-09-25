@@ -59,7 +59,7 @@
             <van-icon name="arrow-up" />
             </div>
             
-         <div class="btn">
+         <div class="btn" @click="headerRight">
             确定({{result.length}}/{{apiData.length}})
          </div>
       </div>
@@ -110,6 +110,8 @@ export default {
    name:"Home",
       props:{
          leftClick:Function,
+         handleSubmit:Function
+
       },
       components:{
          RoomItem,
@@ -127,7 +129,7 @@ export default {
       }
       },
       mounted(){
-         const { wrapper } = this.$refs;
+        const { wrapper } = this.$refs;
          this.$nextTick(()=>{
             this._BScroll = new BScroll(wrapper,{
                click: true,
@@ -140,7 +142,6 @@ export default {
       },
       methods:{
          onSearch(value){
-            console.log(value)
          },
          closeFn(){
             this.selectRoom = false;
@@ -178,12 +179,29 @@ export default {
             this.leftClick()
          },
          headerRight(){
-            this.leftClick()
-            this.$router.push({path:'/home',
-               query:{
-                 key:this.name,
-               }
+            let config = {};
+            let text= '';
+            let idArr =[];
+            let typeArr = [];
+            let _data = this.result;
+            if(_data.length){
+               text = `会议室: ${this.mapData[_data[0]].room_cn_name}${_data.length === 1 ? '':'等'+_data.length+'个'}`
+            }
+            idArr = _data.map((id)=>{
+               let current = this.mapData[id];
+               typeArr.push(current.room_type)
+               return current.id
             })
+            config.key = "room",
+            config.text = text,
+            config.meeting_room_type = typeArr;
+            config.meeting_room_id = idArr;
+            this.handleSubmit(config)
+            this.leftClick()
+            // this.$router.push({path:'/home',
+            //    query:{
+            //    }
+            // })
          },
       formatter(type, val) {
 			if (type === 'year') {

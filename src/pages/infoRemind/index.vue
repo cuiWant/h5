@@ -47,12 +47,12 @@ export default {
 				{text:'1天前',value:1440}
 			],
 			checkMessage:[{
-					text:'站内信',value:1
+					text:'站内信',value:"sys_message"
 					},{
-					text:'企业微信',value:2
+					text:'企业微信',value:"wx_work"
 					},{
-						text:'邮件',value:4
-						}]		
+						text:'邮件',value:"email"
+					}]		
 		};
 	},
 	methods: {

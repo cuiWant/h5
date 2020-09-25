@@ -5,7 +5,7 @@
          <div class="meeting-content">
             <div  class="meeting-list" v-for="(item,index) in meetingData" :key="index">
                <div class="time">{{index}}</div>
-               <div class="item" v-for="(el,i) in item.data " :key="i">
+               <div class="item" @click="click(el)" v-for="(el,i) in item.data " :key="i">
                   <div class="item-title">{{el.theme}}</div>
                   <div class="item-time">{{ el.start_time.split(' ')[1]}}-{{el.end_time.split(' ')[1]}}</div>
                   <div class="item-user">
@@ -15,6 +15,11 @@
             </div>
          </div>
       </div>
+
+		<van-popup  :lock-scroll="false" :overlay="false" v-model="show" position="right" :style="{ width: '100%',height:'100%' }" >
+         <router-view :leftCallback="leftCallback"></router-view>
+   	</van-popup>
+      
  </div>
 </template>
  
@@ -31,10 +36,13 @@ export default {
          page_size:10,
          meetingData:{},
          flag:true,
-         endData:true
+         endData:true,
+         show:false
       }
       },
       mounted(){
+
+         this.show = false;
          this.request().then(()=>{
             this._BScroll.on('scrollEnd',()=>{
                if(!this.endData){
@@ -56,11 +64,24 @@ export default {
          headerRight(){
 
          },
+         leftCallback(){
+            this.show = false
+         },
+         click(e){
+            this.$router.push({
+               path:'/allmeeting/detail',
+               query:e
+            })
+            this.show = true
+         },
          request(){
             let {page_num,page_size}  = this
             return this.$request.meetingList({
                page_num,
-               page_size
+               page_size,
+               // order_by_clause
+               // start_time:this.$moment(Date.now()).format('YYYY-MM-D 00:00:00'),
+               // end_time:this.$moment(Date.now() + 1000 * 60 * 60 * 24 * 365 * 10).format('YYYY-MM-D HH:mm:ss')
             }).then((res)=>{
                this.$loading.close()
                if(res.success){

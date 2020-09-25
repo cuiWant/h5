@@ -5,9 +5,13 @@
 
       <van-radio-group v-model="radio">
          <van-cell-group>
-            <van-cell :class="`${index !=  (radioData.length-1) ? 'border-bottom' :''} cell`"  v-for="(item,index) in  radioData " :key="item.value" :title="item.text" clickable @click="radio = item.value" >
+            <van-cell  :class="`${index !=  (radioData.length-1) ? 'border-bottom' :''} cell`"  v-for="(item,index) in  radioData " :key="item.value" :title="item.text" clickable @click="()=>{
+               if(!pattern[index]){
+                  radio = item.value
+               }
+               }" >
                <template #right-icon>
-               <van-radio icon-size="25px" :name="item.value" />
+               <van-radio :disabled="pattern[index]" icon-size="25px" :name="item.value" />
                </template>
             </van-cell>
          </van-cell-group>
@@ -25,8 +29,8 @@ for (let i = 0; i < 99; i++) {
 export default {
       props:{
          leftClick:Function,
-         handleSubmit:Function
-
+         handleSubmit:Function,
+         pattern:Array
       },
       data () {
       return {
@@ -55,6 +59,16 @@ export default {
       },
       mounted(){
       },
+      activated(){
+          let index =this.radioData.findIndex((e)=>{
+               return e.value ===  this.radio
+            })
+         this.pattern.forEach((e,i)=>{
+               if(index === i){
+                 this.radio = e ?   this.radio : ''
+               }             
+         })
+      },
       methods:{
          headerLeft(){
             this.$router.push({path:'/home',
@@ -72,7 +86,7 @@ export default {
               this.handleSubmit({
                  key:this.name,
                  text:`${radioText ? radioText.text:''}`,
-                 [this.radio && "meeting_patten"]:console.log(this.radioData) || this.radioData,
+                 [this.radio && "meeting_patten"]:this.radio ,
                //   replaceCount:this.defaultIndex+1
                   //   text:`${}`,
                //   meeting_introductio:this.message

@@ -5,7 +5,7 @@
                     <span class="iconfont ticobackicon-close" @click="close"></span>
                 </div>
                   <div  class="img-container"> 
-                        <img src="@/assets/prompt.svg" alt="">
+                        <img src="./prompt.svg" alt="">
                         <div class="hint">提示</div>
                         <div v-if="typeof hintText === 'string'" class="hint-text">{{hintText}}</div> 
                         <div v-else class="hint-text">

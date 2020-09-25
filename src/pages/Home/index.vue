@@ -1,7 +1,7 @@
 <template>
 	<div class="container">
 		<Header ref="header" :leftClick="headerLeft" :rightClick="headerRight" :title="'预约会议'" rightText="完成"></Header>
-		<div ref="wrapper" id="wrapper">
+		<div ref="wrapper" id="wrapper" >
 			<div class="content-wrapper">
 				<div class="home space-bottom">
 					<div class="text-area">
@@ -13,8 +13,14 @@
 							<div class="time-bottom">{{ timeConfig.start.week }}</div>
 						</div>
 						<div class="middle-line">/</div>
-						<div class="time" @click="dateShow(false)" >
-							<div class="time-top">{{ timeConfig.start.date }} {{ timeConfig.start.time }}</div>
+						<div class="time" @click="()=>{
+								if(this.timeConfig.start.start_time){
+									dateShow(false)
+								}else{
+									dateShow(true)
+								}
+							}" >
+							<div class="time-top">{{ timeConfig.start.date }} {{ timeConfig.end.time }}</div>
 							<div class="time-bottom">{{ timeConfig.start.week }}</div>
 						</div>
 					</div>
@@ -24,7 +30,6 @@
 						<span class="iconfont  addContactsLeft ticobackicon-meeting_organizer  "></span>
 						<div class="addContactsRight">
 							<span class="addContactFont">我
-
 								<van-tag class='tag' type="primary">组织人</van-tag>
 							</span>
 						</div>
@@ -37,7 +42,7 @@
 						</div>
 							<van-icon class="addContactsIcon" @click="touchAddContact(true)" name="arrow" />
 					</div>
-					<div class="addContacts border-bottom" >
+					<div class="addContacts border-bottom" v-if="room" >
 						<span class="iconfont  addContactsLeft ticobackicon-meeting_room  "></span>
 						<div class="addContactsRight" @click="goRoom(true)"  >
 								<span v-if="room" class="addContactFont">{{room}}</span>
@@ -45,7 +50,7 @@
 							 
 						</div>
 							<div>
-							 <van-icon  v-if="!room" class="addContactsIcon" name="arrow" @click="goRoom(true)"  /><van-icon  v-else class="addContactsIcon" name="cross" @click="goRoom(false)"  />
+								<van-icon  v-if="true" class="addContactsIcon" name="arrow" @click="goRoom(true)"  /><van-icon  v-else class="addContactsIcon" name="cross" @click="goRoom(false)"  />
 							</div> 
 					</div>
 					<div class="addContacts space-bottom" >
@@ -61,7 +66,7 @@
 							<van-icon  class="addContactsIcon" @click="goPattern(true)"  name="arrow" />
 							<!-- <van-icon v-else class="addContactsIcon" @click="goPattern(false)"  name="cross" /> -->
 					</div>
-					<div class="addContacts space-bottom" >
+					<div class="addContacts space-bottom" v-if="replace" >
 						<span class="iconfont  addContactsLeft ticobackicon-refresh  "></span>
 						<div class="addContactsRight" @click="goReplace(true)"  >
 							<span v-if="replace" class="addContactFont">{{replace}}</span>
@@ -88,11 +93,11 @@
 							 <!-- <van-icon  v-else @click="touchInfoRemind(false)"   class="addContactsIcon" name="cross" /> -->
 							</div> 
 					</div>
-				<div class="addContacts space-bottom" >
+				<div class="addContacts space-bottom" v-if="detail" >
 						<span class="iconfont  addContactsLeft ticobackicon-meeting_description  "></span>
 						<div class="addContactsRight" @click="goDetail(true)" >
 							<span v-if="detail" class="addContactFont">{{detail}}</span>
-							<span v-else class="addContactFont">请添加描述</span>
+							<span v-else class="addContactFont">请添加简介</span>
 							 
 						</div>
 							<div>
@@ -112,19 +117,19 @@
 		<Nav v-if="(navData.some(e=>e.status))" :config="navData" :click="handleNavClick"></Nav>
 		<van-popup  :lock-scroll="false" :overlay="false" v-model="footerRouterShow" position="right" :style="{ width: '100%',height:'100%' }" >
 		<keep-alive >  
-			<router-view :handleSubmit="handleChidlren" :leftClick="routerLeftClick" ></router-view>
+			<router-view  :pattern="handlePattern" :handleSubmit="handleChidlren" :leftClick="routerLeftClick" ></router-view>
 		</keep-alive >  
-		
+
 		</van-popup>
 		<van-popup  v-model="show"
          class="time-popup"
          position="bottom"
          closeable
-         :style="{ height: '34%' }">
+		 :style="{ height: '34%' }">
 			
 			<div class="content">
 				<van-datetime-picker v-if="isTimeStart" :filter="filter" :minDate="minDate" visible-item-count="5" item-height ="0.8rem" v-model="currentDate" @confirm="dateHandle" @cancel="dateHandle" type="datetime" :formatter="formatter" />
-				<van-datetime-picker v-else @confirm="dateHandle_end" v-model="endTime" type="time" :min-date="minDate_end" visible-item-count="5" item-height ="0.8rem" :filter="filter" :formatter="formatter" @cancel="dateHandle" />
+				<van-datetime-picker v-else :filter="filter"  @confirm="dateHandle_end" v-model="endTime" type="datetime" :min-date="minEnd" :max-date="maxEnd" visible-item-count="5" item-height ="0.8rem"  :formatter="formatter" @cancel="dateHandle_end" />
 			</div>
 		</van-popup>
 		<Alert ref="alert" :hintText="hintText"></Alert>
@@ -134,20 +139,35 @@
 <script>
 import Alert from '@/components/Alert'
 import BScroll from 'better-scroll';
-import {Toast} from 'vant';
+import {Toast,Notify} from 'vant';
 const showRouter = ['detail','replace','room','addContact']
-const requireArr= [{
-	text:'联系人',
-	showText:"contact",
-	apiData:'attendee_id'
-},'']
-
+const requireArr= [
+	{
+		text:'请输入主题',
+		data:'theme'
+	},{
+		text:'请选择会议室',
+		data:'room'
+	},{
+		text:'请选择会议模式',
+		data:'pattern'
+	},{
+		text:'请选择通知方式',
+		data:'remindersText'
+	},
+	{text:'请选择重复方式',data:'replace'},
+	{
+		text:'请选择参会人',
+		data:'contact'
+	}
+	
+	]
 let { pathname }   = window.location;
 let bool  = !!showRouter.find((e)=>{
 	return pathname.indexOf(e) !== -1
 })
 
-const currentDate = new Date(Date.now());
+const currentDate = new Date(Date.now() + 1000 * 15 * 60);
 
 export default {
 	// name:'Home',
@@ -159,27 +179,27 @@ export default {
 			isTimeStart:true,
 			minDate:currentDate,
 			currentToday:'',
-			minDate_end:currentDate,
+			minDate_end:{},
 			endTime:'',
 			currentDate: new Date(),
 			firstFlag:false,
 			theme: '',
 			contact:'',
 			show:false,
+			hintText:[1,2],
 			footerRouterShow:bool,
 			replace:'',
 			room:'',
 			remindersText:'',
 			timeConfig: {
 				start: {
-					time: '10:10',
-					date: '2月31号',
-					week: '周八',
+					time: '选择开始时间段',
+					date: '-',
+					week: '-',
 				},
 				end: {
-					time: '10:10',
-					date: '2月31号',
-					week: '周八',
+					time: '选择结束时间段',
+					minHour:''
 				},
 			},
 			userName: '林小园',
@@ -199,16 +219,15 @@ export default {
 
 			}],
 			detail:'',
-			pattern:''
+			pattern:'',
+			handlePattern:[true,true,true]
 		};
 	},
 	mounted() {
 		// console.log(this.Toast,'this')
 		const { wrapper } = this.$refs;
-		new BScroll(wrapper,{
+		this._BScroll = new BScroll(wrapper,{
 			click: true,
-			stopPropagation:true,
-            preventDefault: true,
 		});
 		this.show =false;
 		this.footerRouterShow =false;
@@ -218,7 +237,6 @@ export default {
 		// this.$on('hook:beforeDestory', function() {
 		// 	clearInterval(timer);
 		// });
-
 	},
 	activated(){
 		// if( !this.firstFlag ){
@@ -239,13 +257,44 @@ export default {
 	},
 	watch:{
 		room(value,oldvalue){
-			// console.log(value,oldvalue,'value,_value')
 			if(this.pattern){
-
-			this.goPattern(false);
-			Toast.fail('会议室变更需重新选择会议模式');
+				this.goPattern(false);
+				Toast.fail('请重新选择会议模式');
 			}
-	}
+
+			//处理radio
+			let arr = [true,true,true];
+			let _typeArr =this.allData.meeting_room_type;
+			if(_typeArr){
+				let bool = _typeArr.some((e)=>{
+					return e.indexOf('room')  === -1
+				})
+				if(!bool){
+					arr[0] = true;
+					arr[1] = false;  
+					arr[2] = false;
+				}else{
+					arr[0] = false;
+					arr[1] = true;
+					arr[2] = true;
+				}
+			}
+			this.handlePattern = arr;
+		},
+		allData(){
+			this.$nextTick(()=>{
+				this._BScroll && this._BScroll.refresh()
+			})
+		},
+		endTime(value){
+			console.log(value)
+		},
+		minEnd(value){
+			console.log(value)
+		},
+		maxEnd(value){
+			console.log(value)
+		}
 	},
 	methods: {
 		// handle nav 子路由处理
@@ -258,13 +307,15 @@ export default {
 			}
 			this[key] = text;
 				//处理底部导航
-			let navItem = this.navData.find((e)=>{
-				return e.name === key
-			})
-			if(navItem){
-				navItem.status = false;
-				this.navData =[...this.navData]
-			}
+				if(text) {
+					let navItem = this.navData.find((e)=>{
+						return e.name === key
+					})
+					if(navItem){
+						navItem.status = false;
+						this.navData =[...this.navData]
+					}
+				}
 		},
 		goReplace(bool){
 			if(bool){
@@ -329,32 +380,167 @@ export default {
 			}
 		},
 		
-		//表单提交
 		headerLeft() {
 			this.$router.push('/entry')
 		},
+		//表单提交
 		headerRight() {
-			// console.log(this.allData,'alldata')
-			this.$router.push('/allmeeting')
-			// this.$refs.alert.showFn()
+			// {
+			// 	text:'请输入主题',
+			// 	data:'theme'
+			// },{
+			// 	text:'请选择会议模式',
+			// 	data:'pattern'
+			// },{
+			// 	text:'请选择会议室',
+			// 	data:'room'
+			// },
+			// {
+			// 	text:'请选择时间',
+			// 	data:'theme'
+			// }
+			for (let i = 0; i < requireArr.length; i++) {
+				let e =  requireArr[i];
+				if(!this[e.data]){
+					this.hintText = [e.text,''];
+					this.$refs.alert.showFn() 
+					return
+					continue
+				}
+			}
+			if(!this.timeConfig.end.end_time){
+					this.hintText = ['请选择时间',''];
+					this.$refs.alert.showFn() 
+					return 
+			}
+
+			this.$loading.show();
+			// 主题
+			let { replaceCount } = this.allData;
+			//获取 主持人id
+			let { user:userMessage } = this.$store.state;
+			let meeting_host_id = userMessage.user.user_id;
+
+			//处理时间
+			let start_time_list = [];
+			let end_time_list = [];
+			function workday_count(start, end) {
+				let count = 0;
+				let current = start;
+				let arr = [];
+				while (start < end) {
+					const day = current.day();
+					if (day > 0 && day < 6) {
+						arr.push(current.format('YYYY-MM-D HH:mm:ss'))
+					}
+					current = current.add(1, 'd');
+				}
+				return arr;
+			}
+			let replaceConfig = [{
+					value:0,
+					_value:false,
+					},
+					{
+					value:5,
+					_value:"Mon,Tue,Wed,Thu,Fri",
+					},
+					{
+					value:1,
+					_value:'1'
+					},
+					{
+					value:7,
+					text:'每周',
+					_value:'Sun,Sat,Thu,Tue,Mon,Wed,Fri'
+					}
+				];
+			let obj = replaceConfig.find((e)=>{
+				return e._value === this.allData.interval_flag
+			})
+			let startTime =this.timeConfig.start.start_time; // hhmmss
+			let endTime =this.timeConfig.end.end_time;
+			let startNow =  this.$moment(startTime).valueOf();
+			let endNow =  this.$moment(endTime).valueOf();
+			let dayNow = 1000 * 60 * 60 * 24;
+			switch (obj.value) {
+				case 0:
+					start_time_list.push(startTime)
+					end_time_list.push(endTime)
+					break;
+				case 5:
+					let startEnd = (replaceCount) *  dayNow  * 7 + startNow  + (7 - this.$moment(startTime).day()) *  startNow;
+					let endEnd = (replaceCount )*  dayNow  * 7 +  endNow + (7 - this.$moment(startTime).day()) *  startNow ;
+					start_time_list.push(...workday_count(this.$moment(startTime),this.$moment(startEnd)))
+					end_time_list.push(...workday_count(this.$moment(endTime),this.$moment(endEnd)))
+					break;
+				case 1:
+					for (let i = 0; i < replaceCount;i++){
+						start_time_list.push(this.$moment(startNow + dayNow * i ).format('YYYY-MM-D HH:mm:ss'))
+						end_time_list.push(this.$moment(endNow + dayNow * i ).format('YYYY-MM-D HH:mm:ss'))
+					}
+					break
+				case 7:
+					for (let i = 0; i < replaceCount;i++){
+						start_time_list.push(this.$moment(startNow + dayNow * i * 7 ).format('YYYY-MM-D HH:mm:ss'))
+						end_time_list.push(this.$moment(endNow + dayNow * i * 7 ).format('YYYY-MM-D HH:mm:ss'))
+					}
+					break
+			};
+		let meetingConfig  = {
+			...this.allData,
+			start_time_list,
+			end_time_list,
+			theme:this.theme,
+			meeting_host_id
+		} 
+
+		this.$request.makeMeeting(meetingConfig).then((res)=>{
+			this.$loading.close();
+			if(res.success){
+				Notify({type: 'success', message: (res.data.msg ||'预约成功'),duration:1000});
+				this.$router.push('/allmeeting');
+			}else{
+				Notify({type: 'danger', message: (res.data.msg ||'预约异常'),duration:2000});
+				console.log(res,'xx')
+			}
+		})
 		},
 		dateShow(bool) {
 			this.isTimeStart = bool;
 			this.show = true;
 		},
 		dateHandle_end(value){
-				if (value) {
-				this.currentDate = value;
+			if (value) {
+				let m = this.$moment(value)
+				this.timeConfig.end ={
+					time : m.format('HH:mm'),
+					end_time :m.format('YYYY-MM-D HH:mm:ss')
+				};
 			}
 			this.show = false;
 		},
 		dateHandle(value) {
 			if (value) {
-				// console.log(,'xx')
 				let _value = new Date(value).valueOf();
-				this.currentDate = _value;
-				this.minDate_end = _value;
-		}	
+				let m = this.$moment(value)
+				this.currentDate = value;
+				this.minDate_end = this.$moment(value).format('YYYY-MM-D HH:mm:ss');
+				this.timeConfig.start = {
+					time: m.format('HH:mm'),
+					date:m.format('MM/D'),
+					week:m.format('dddd'),
+					start_time:m.format('YYYY-MM-D HH:mm:ss')
+				}
+				let end =this.$moment(_value + 1000 * 60 * 15) ;
+				this.minDate_end = {
+					hour : end.format('HH'),
+					minute : end.format('mm')
+				}
+				this.timeConfig.end ={
+					time:'请选择结束时间段'
+				}
+			}	
 			this.show = false;
 			// console.log(value);
 		},
@@ -378,7 +564,8 @@ export default {
 		},
 		  filter(type, options) {
 			if (type === 'minute') {
-				return options.filter((option) => option % 15 === 0);
+				return  options.filter((option) => {
+				return option % 15 === 0});
 			}
 			return options;
 			},
@@ -387,9 +574,7 @@ export default {
 		},
 		routerLeftClick(){
 			this.footerRouterShow=false;
-		}
-		
-		,handleClose(config){
+		},handleClose(config){
 			for( let _key in config){
 				let bool = Array.isArray(config[_key])
 				if(bool){
@@ -408,8 +593,11 @@ export default {
 		}
 	},
 	computed:{
-		hintText(){
-			return [1,2]
+		minEnd(){
+			return new Date(this.currentDate.valueOf() + 1000 * 60  * 15)
+		},
+		maxEnd(){
+			return new Date(this.$moment(this.currentDate.valueOf()).format(`YYYY/MM/D 23:59:59`))
 		}
 	}
 };
@@ -420,7 +608,7 @@ export default {
 .container
 	height 100%
 	#wrapper
-		height calc(100% - 88px - 98px);
+		height calc(100% - 88px);
 		overflow: hidden;
 		background #f7f7f7
 	.test

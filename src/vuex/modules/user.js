@@ -13,7 +13,6 @@ const state = {
 };
 const mutations = {
 	[RECEIVE_USER](state, { user }) {
-		console.log(user,'user')
 		state.user = user;
 	},
 

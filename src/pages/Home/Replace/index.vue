@@ -15,10 +15,10 @@
       <div class="line"></div>
          <van-cell v-if="radio"  @click.prevent="show=true"  title="重复次数" class="cell border-bottom"   is-link arrow-direction="down" :value="num" />
          <van-popup
-         v-model="show"
-         position="bottom"
-         closeable
-         :style="{ height: '34%' }"
+            v-model="show"
+            position="bottom"
+            closeable
+            :style="{ height: '34%' }"
          >
          <van-picker
                item-height="60px"
@@ -59,17 +59,17 @@ export default {
             text:'不重复',
             value:false,
          },
-         {
-            text:'每个工作日(周一到周五)',
-            value:"Mon,Tue,Wed,Thu,Fri",
-         },
+         // {
+         //    text:'每个工作日(周一到周五)',
+         //    value:"Mon,Tue,Wed,Thu,Fri",
+         // },
          {
             text:'每天',
             value:'1'
          },
          {
             text:'每周',
-            value:'7'
+            value:'Sun,Sat,Thu,Tue,Mon,Wed,Fri'
          }
          ],
        columns,
@@ -90,17 +90,32 @@ export default {
                return this.radio=== e.value;
             })
             this.leftClick()
-            this.$router.push({path:'/home',
-            })
-
-              this.handleSubmit({
+            let obj ={};
+            if(!this.radio){
+                  obj ={
+               key:this.name,
+               text:`不重复`,
+               repeat_type: 'day',
+               repeat_flag: false ,
+               replaceCount:0,
+               frequency:'',
+               interval_flag:this.radio
+               }   
+               
+            } else{
+               obj = {
                  key:this.name,
                  text:`${radioText ? radioText.text:'无'} ${ this.num ? ','+this.num + '终止':''}`,
-                 [this.radio && "interval_flag"]:this.radio,
-                 replaceCount:this.defaultIndex+1
-                  //   text:`${}`,
-               //   meeting_introductio:this.message
-               })
+                 ["interval_flag"]:this.radio,
+                 repeat_type: this.radio === '7' ? 'week':'day',
+                 repeat_flag: !!this.radio.value && this.num.slice(0,1) > 1 ,
+                 replaceCount:this.defaultIndex+1,
+                 frequency:this.defaultIndex+1
+               }
+            }
+            this.handleSubmit(obj)
+            this.$router.push({path:'/home',})
+
          }
       ,
          onChange(that,value){

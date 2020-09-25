@@ -33,13 +33,12 @@ router.beforeEach((to, from, next) => {
 	// }
 	if(bool){
 		next()
-
 	}else{
 		if(!store.state.user.token){
+			
 			return next('/login')
 		}
+		next()
 	}
-
-	next()
   })
 export default router;
