@@ -1,6 +1,6 @@
 import Vue from 'vue';
 
-import Vant from 'vant';
+import Vant,{Notify} from 'vant';
 import moment from 'moment';
 // import Vuex from 'vuex';
 import loading from '@/components/Loading';
@@ -13,6 +13,7 @@ Vue.prototype.$moment = moment;
 Vue.prototype.$loading = loading;
 Vue.prototype.console = console;
 Vue.prototype.$request = request;
+Vue.prototype.$Toast = Notify;
 
 Vue.prototype.$http = http;
 moment.locale('zh-cn');

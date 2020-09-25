@@ -1,6 +1,6 @@
 <template>
  <div class="patten-wrapper">
-		<Header :leftClick="headerLeft" :rightClick="headerRight" :title="'重复'" rightText="完成"></Header>
+		<Header :leftClick="headerLeft" :rightClick="headerRight" :title="'会议模式'" rightText="完成"></Header>
       <div ref="wrapper" class="replace-list">
 
       <van-radio-group v-model="radio">

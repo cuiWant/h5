@@ -262,6 +262,7 @@ export default {
               margin-right 23px
               font-size 34px
           .contactAllImage
+            background #1890ff
             width 84px
             height 84px
             border-radius 10px

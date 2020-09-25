@@ -15,7 +15,6 @@
             </div>
          </div>
       </div>
-
 		<van-popup  :lock-scroll="false" :overlay="false" v-model="show" position="right" :style="{ width: '100%',height:'100%' }" >
          <router-view :leftCallback="leftCallback"></router-view>
    	</van-popup>
@@ -30,6 +29,7 @@ export default {
       props:{
          leftClick:Function,
       },
+     
       data () {
       return {
          page_num:1,
@@ -75,6 +75,7 @@ export default {
             this.show = true
          },
          request(){
+            this.$loading.show()
             let {page_num,page_size}  = this
             return this.$request.meetingList({
                page_num,
@@ -118,7 +119,7 @@ export default {
 }
 </script>
  
-<style scoped lang = "stylus">
+<style  lang = "stylus">
    .room-wrapper
       height 100%
       .meeting-wrapper
@@ -163,4 +164,28 @@ export default {
                   .item-user
                      color: #666666
                      font-size 28px
+      .footer
+         height 110px
+         width 100%
+         display flex
+         align-items center
+         border-top 1px solid #f3f3f3
+         /* flex-direction column */
+         .line
+            width 1px
+            height 72px
+            background rgba(236, 236, 236, 1)
+         .edit
+            color rgba(24, 144, 255, 1)
+            fon-size 34px
+            width 49%
+            .content
+               justify-content center
+               display flex
+               align-items center
+               .iconfont   
+                  margin-right 20px
+         .opacity
+            opacity .4
+
 </style>

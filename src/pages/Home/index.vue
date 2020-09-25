@@ -42,7 +42,7 @@
 						</div>
 							<van-icon class="addContactsIcon" @click="touchAddContact(true)" name="arrow" />
 					</div>
-					<div class="addContacts border-bottom" v-if="room" >
+					<div class="addContacts border-bottom" >
 						<span class="iconfont  addContactsLeft ticobackicon-meeting_room  "></span>
 						<div class="addContactsRight" @click="goRoom(true)"  >
 								<span v-if="room" class="addContactFont">{{room}}</span>
@@ -66,7 +66,7 @@
 							<van-icon  class="addContactsIcon" @click="goPattern(true)"  name="arrow" />
 							<!-- <van-icon v-else class="addContactsIcon" @click="goPattern(false)"  name="cross" /> -->
 					</div>
-					<div class="addContacts space-bottom" v-if="replace" >
+					<div class="addContacts space-bottom"  >
 						<span class="iconfont  addContactsLeft ticobackicon-refresh  "></span>
 						<div class="addContactsRight" @click="goReplace(true)"  >
 							<span v-if="replace" class="addContactFont">{{replace}}</span>
@@ -93,7 +93,7 @@
 							 <!-- <van-icon  v-else @click="touchInfoRemind(false)"   class="addContactsIcon" name="cross" /> -->
 							</div> 
 					</div>
-				<div class="addContacts space-bottom" v-if="detail" >
+				<div class="addContacts space-bottom"  >
 						<span class="iconfont  addContactsLeft ticobackicon-meeting_description  "></span>
 						<div class="addContactsRight" @click="goDetail(true)" >
 							<span v-if="detail" class="addContactFont">{{detail}}</span>
@@ -155,7 +155,6 @@ const requireArr= [
 		text:'请选择通知方式',
 		data:'remindersText'
 	},
-	{text:'请选择重复方式',data:'replace'},
 	{
 		text:'请选择参会人',
 		data:'contact'
@@ -312,7 +311,7 @@ export default {
 						return e.name === key
 					})
 					if(navItem){
-						navItem.status = false;
+						// navItem.status = false;
 						this.navData =[...this.navData]
 					}
 				}
@@ -399,6 +398,7 @@ export default {
 			// 	text:'请选择时间',
 			// 	data:'theme'
 			// }
+			let _allData = this.allData;
 			for (let i = 0; i < requireArr.length; i++) {
 				let e =  requireArr[i];
 				if(!this[e.data]){
@@ -413,10 +413,18 @@ export default {
 					this.$refs.alert.showFn() 
 					return 
 			}
-
-			this.$loading.show();
+			if(!this.replace){
+				_allData = {
+					..._allData,
+					repeat_type: 'day',
+					repeat_flag: false ,
+					replaceCount:0,
+					frequency:'',
+					interval_flag:false
+				}
+			}
 			// 主题
-			let { replaceCount } = this.allData;
+			let { replaceCount } = _allData;
 			//获取 主持人id
 			let { user:userMessage } = this.$store.state;
 			let meeting_host_id = userMessage.user.user_id;
@@ -456,7 +464,7 @@ export default {
 					}
 				];
 			let obj = replaceConfig.find((e)=>{
-				return e._value === this.allData.interval_flag
+				return e._value === _allData.interval_flag
 			})
 			let startTime =this.timeConfig.start.start_time; // hhmmss
 			let endTime =this.timeConfig.end.end_time;
@@ -486,23 +494,22 @@ export default {
 						end_time_list.push(this.$moment(endNow + dayNow * i * 7 ).format('YYYY-MM-D HH:mm:ss'))
 					}
 					break
-			};
-		let meetingConfig  = {
-			...this.allData,
-			start_time_list,
-			end_time_list,
-			theme:this.theme,
-			meeting_host_id
-		} 
-
+				};
+			let meetingConfig  = {
+				..._allData,
+				start_time_list,
+				end_time_list,
+				theme:this.theme,
+				meeting_host_id
+			} 
+		this.$loading.show();
 		this.$request.makeMeeting(meetingConfig).then((res)=>{
 			this.$loading.close();
 			if(res.success){
-				Notify({type: 'success', message: (res.data.msg ||'预约成功'),duration:1000});
+				// Notify({type: 'success', message: (res.data.msg ||'预约成功'),duration:1000});
 				this.$router.push('/allmeeting');
 			}else{
-				Notify({type: 'danger', message: (res.data.msg ||'预约异常'),duration:2000});
-				console.log(res,'xx')
+				Notify({type: 'danger', message: (res.data.msg ||'预约异常'),duration:2500});
 			}
 		})
 		},
@@ -608,7 +615,7 @@ export default {
 .container
 	height 100%
 	#wrapper
-		height calc(100% - 88px);
+		height calc(100% - 88px - 98px);
 		overflow: hidden;
 		background #f7f7f7
 	.test

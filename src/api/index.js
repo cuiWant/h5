@@ -51,11 +51,28 @@ function makeMeeting(data){
         url:`${prefix}/backgroundinterface/meeting_appointment/appointment`,
     })
 }
+function queryMeetingById(data){
+    return ajax({
+        method:'POST',
+        data,
+        url:`${prefix}/backgroundinterface/meeting_appointment/findAppointmentById`,
+    })
+}
+
+function cancelMeeting(data) {
+    return ajax({
+        method:'POST',
+        data,
+        url:`${prefix}/backgroundinterface/meeting_appointment/cancelAppointment`,
+    })
+}
 export default {
     login,
     wechatQuery,
     confirmMeeting,
     findMeeting,
     meetingList,
-    makeMeeting 
+    makeMeeting,
+    queryMeetingById,
+    cancelMeeting
 }

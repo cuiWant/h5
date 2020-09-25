@@ -2,6 +2,7 @@ import { Toast } from 'vant';
 function init(time = 0) {
 	Toast.setDefaultOptions({ duration: time });
 }
+
 function close(bool) {
 	Toast.clear();
 	init(500);

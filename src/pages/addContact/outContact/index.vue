@@ -47,7 +47,6 @@ export default {
   methods:{
     //点击部门
     checkContactItems(key){
-      console.log(key);
       this.$router.push({path:'/addContact/outContact/enterPrisePart',query:{key:key}})
     },
     //勾选任意项

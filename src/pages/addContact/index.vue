@@ -373,8 +373,9 @@ export default {
 	display flex 
 	justify-content center 
 	align-items center
-	background #f2f2f8
-	color #d8d9db
+	background #53adffeb
+	color #fff
+	
 	.iconfont
 		font-size 38px
 </style>

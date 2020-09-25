@@ -5,7 +5,7 @@
                     <span class="iconfont ticobackicon-close" @click="close"></span>
                 </div>
                   <div  class="img-container"> 
-                        <img src="./prompt.svg" alt="">
+                        <img src="../../../public/prompt.svg" alt="">
                         <div class="hint">提示</div>
                         <div v-if="typeof hintText === 'string'" class="hint-text">{{hintText}}</div> 
                         <div v-else class="hint-text">
@@ -14,12 +14,12 @@
                             </div>    
                         </div> 
                     </div>
-                    <footer v-if="false" >
-                        <div class="cancel" @click="close">取消</div>
-                        <div class="confirm" @click="close" >确定</div>
+                    <footer v-if="selectFlag" >
+                        <div class="cancel" @click="close(false)">取消</div>
+                        <div class="confirm" @click="close(true)" >确定</div>
                     </footer>
                     <div v-else class="footer-btn">
-                        <div class='btn-text' @click="close">确定</div>
+                        <div class='btn-text' @click="close(true)">确定</div>
                     </div>
             </div>
         </van-popup>
@@ -28,23 +28,38 @@
 <script>
 export default {
     props:{
-        hintText:String | Array
+        hintText:String | Array,
+        confirm:Function,
+        cancel:Function,
+        select:Boolean
     },
  data () {
  return {
-     show:false
+     show:false,
+     flag:false,
+     selectFlag:this.select || false,
+     promise:new Promise(()=>{})
  }
  },
  methods:{
-    showFn(){
-         this.show = true;
-     },
+     async showFn(){
+        this.show = true;
+        return this.promise
+    },
     closeFn(){
        
        this.show = false;
     },
-    close(){
-       
+    close(bool){
+       if(bool){
+           
+           this.confirm && this.confirm()
+       }else{
+            this.cancel && this.cancel()
+       }
+       this.promise.then(()=>{
+               return bool
+           })
        this.show = false;
      }
  }
