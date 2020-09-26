@@ -4,7 +4,7 @@
                 <li class="item " v-for="(element,i) in scaleData" :key="element.time">
                     <div class="block-container">
                         <div  :class="`block ` "  v-for="(item,index) in itemNum" :key="item">
-                            <div v-if ="!element.activeIndex[index]" class='white'></div>
+                            <div v-if ="  !element.activeIndex[index]" class='white'></div>
                             <div v-else class='gray'></div>
                         </div>
                     </div>
@@ -77,6 +77,30 @@ export default {
                 let end = this.$moment(e.end_time).format('HH:mm')
                 let [startIndex,startMinute] = start.split(':');
                 let [endIndex,endMinute] = end.split(':');
+                if(startIndex === endIndex){
+                    let handleArr = scaleData[startIndex-addTime].activeIndex;
+                    let bool = endMinute - startMinute > 30  
+                    let count = this.count || 2;
+                   if( bool ){
+                            for(let i = 0; i< count; i++){
+                               handleArr[i] = true
+                            }
+                        }else{
+                            // let num = 0
+                            if(startMinute >= 30){
+                                // num  = count/2
+                                handleArr[1] = true
+
+                            }else{
+                                handleArr[0] = true
+
+                            }
+                            //   for(let i = count/2; i< count; i++){
+                            //       handleArr[i + num] = true
+                            //       console.log(handleArr,i + num)
+                            // }
+                    }
+                }
                 for (let i  = Number(startIndex); i < Number(endIndex); i++ ){
                     let count = this.count || 2;
                     let index = i-addTime;  //真正的下表
@@ -85,29 +109,25 @@ export default {
                     } 
                     let handleArr = scaleData[index].activeIndex;
                     if(i === startIndex ){
-                        let bool = scaleData[index] - 15 > 0 
+                        let bool = (startMinute-0) < 30
                         if(bool ){
                             for(let i = 0; i< count; i++){
                                handleArr[i] = true
                             }
                         }else{
-                              for(let i = count/2; i< count; i++){
-                               handleArr[i] = true
-                            }
+                            handleArr[0] = true
                         }
                         // for(let i = 0; i< count; i++){
                         //     handleArr[i] = true
                         // }
                     }else if( i === endIndex){
-                    let bool = scaleData[index] - 15 > 0 
-                        if(!bool ){
+                        let bool = (endMinute-0) > 30
+                        if(bool ){
                             for(let i = 0; i< count; i++){
                                handleArr[i] = true
                             }
                         }else{
-                              for(let i = count/2; i< count; i++){
-                               handleArr[i] = true
-                            }
+                            handleArr[1] = true
                         }
                     }else{
                         for(let i = 0; i< count; i++){

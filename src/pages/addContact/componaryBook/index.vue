@@ -11,9 +11,12 @@
 
          </div>
     </div>
+      <div class="check-all">
+		      	<van-checkbox class="contactAllcheckbox" v-model="checkAll"  @click.prevent="checkAllItems(checkAll)">全选</van-checkbox>
+      </div>
     <div class="user-wrapper">
   <div class="contactBottom" :style="{overflow:'hidden'}" ref="contact">
-		<van-checkbox-group v-if="!value" class=" contactBottom-container"  v-model="result" ref="checkboxGroup" direction="horizontal">
+		<van-checkbox-group  v-if="!value" class=" contactBottom-container"  v-model="result" ref="checkboxGroup" direction="horizontal">
 			<ul style="width:100%">
 				<li v-for="(item, index) in letterArr" :key="index">
 					<div v-if="apiData[item]">
@@ -32,7 +35,7 @@
 				</li>
 			</ul>
 	</van-checkbox-group>
-  		<van-checkbox-group v-else class=" contactBottom-container"  v-model="result" ref="checkboxGroup" direction="horizontal">
+  		<van-checkbox-group  v-else class=" contactBottom-container"  v-model="result" ref="checkboxGroup" direction="horizontal">
 			<ul style="width:100%">
 				<li v-for="(item, index) in letterArr" :key="index">
 					<div v-if="searchData[item]">
@@ -115,6 +118,7 @@ export default {
     // 优化使用 单例模式 ===== 使用
     this.selectKey={}
     return {
+      checkAll:false,
       index:'0',
       result:[],
       selectUser:false,
@@ -155,6 +159,14 @@ export default {
     },
   _delete(index){
     this.result.splice(index,1);
+  },
+  checkAllItems(bool){
+    	if(bool){
+				this.$refs.checkboxGroup.toggleAll(true)
+
+			}else{
+				this.$refs.checkboxGroup.toggleAll(false)
+      }
   },
   adduser(){
 
@@ -226,6 +238,16 @@ export default {
 
 .addOutContact  
     height 100%
+    .check-all
+        height 110px 
+        display flex 
+        padding-left 32px
+        color #333
+        .van-checkbox__label
+            margin-left 45px
+            font-size 35px
+            font-weight bold
+            display block 
     .search-wrapper
         display flex
         align-items center
@@ -248,7 +270,7 @@ export default {
               .van-search__content
                   padding-left 30px
     .user-wrapper
-        height calc(100% - 120px - 88px -  98px)
+        height calc(100% - 120px - 88px -  98px - 110px)
         .contactUnix
           width 100%
           height 100%
