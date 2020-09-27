@@ -7,11 +7,13 @@
     <ul class="contactBottom">
       <li v-for="(item, index) in userInfoArr" :key="index">
         <div class="contactBottomAuthor">
-          <van-checkbox class="contactAllcheckbox" v-model="item.checkeds" @click.prevent="checkAllItemsKey(userInfoArr[index])" />
-          <div class="contactAllRight">
+          <van-checkbox class="contactAllcheckbox" v-model="item.checkeds" @click.prevent="checkAllItemsKey(userInfoArr[index])" >
+             <div class="contactAllRight">
             <img class="contactAllImage" src="@/assets/logo.png" />
             <p class="contactName">{{ item.name }}</p>
           </div>
+          </van-checkbox>
+         
         </div>
         <van-divider />
       </li>

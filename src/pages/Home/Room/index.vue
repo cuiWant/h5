@@ -21,12 +21,15 @@
                   <span  v-if="currentDate" class="week" >{{$moment(currentDate).format('dddd')}}</span>
                   <span class="iconfont ticobackicon-unfold_alarm"></span>
             </div>
+            <div class="room-check-all"> 
+		      	<van-checkbox  v-model="checkAll"  @click.prevent="checkAllItems(checkAll)">全选</van-checkbox>
+            </div>
          </div>
       </div>
       <div  ref="wrapper" class="room-list">
          <div v-if="!value">
 
-         <van-checkbox-group v-model="result">
+         <van-checkbox-group ref="roomCheck" v-model="result">
             <div v-for="(item) in apiData" :key="item.id">
                <div class="line"></div>
                <div class="room-container"  >
@@ -38,7 +41,7 @@
          </van-checkbox-group>
          </div>
       <div v-else>
-         <van-checkbox-group v-model="result">
+         <van-checkbox-group ref="roomCheck" v-model="result">
             <div v-for="(item) in searchData" :key="item.id">
                <div class="line"></div>
                <div class="room-container"  >
@@ -118,6 +121,7 @@ export default {
       },
       data () {
       return {
+         checkAll:false,
          selectRoom:false,
          minDate:new Date(),
          currentDate:new Date(),
@@ -141,6 +145,9 @@ export default {
       activated(){
       },
       methods:{
+         checkAllItems(bool){
+            this.$refs.roomCheck.toggleAll(bool)
+         },
          onSearch(value){
          },
          closeFn(){
@@ -266,7 +273,7 @@ export default {
 }
 </script>
  
-<style scoped lang = "stylus">
+<style  lang = "stylus">
 @import "../../../common/stylus/mixins.styl";
 .room-wrapper
    height  100%
@@ -278,6 +285,21 @@ export default {
          padding 0 32px
          display flex
          align-items center
+         justify-content space-between
+         .room-check-all
+            height 100%
+            .van-checkbox
+               height 100%
+               font-size 32px
+               display flex 
+               justify-content space-between
+               align-items center
+               .van-checkbox__icon
+                  height 100%
+                  display flex
+                  align-items center
+                  .van-icon
+                     font-size 26px
          .time-message 
             font-size 30px
             color #333333

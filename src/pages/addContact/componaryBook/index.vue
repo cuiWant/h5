@@ -22,14 +22,15 @@
 					<div v-if="apiData[item]">
 						<p class="contactBottomCaps">{{ item }}</p>
 						<div class="contactBottomAuthor" v-for="(element) in apiData[item]" :key="element.id" >
-					    <van-checkbox class="contactAllcheckbox"  :name="element.id"  />
+					    <van-checkbox class=" contactAllcheckbox"  :name="element.id"  >
 							 <div class="contactAllImage">
                         <span class="iconfont ticobackicon-avatar"></span>
                 </div>
               <div class="contactNameAndPost">
-								<p class="contactName">{{ element.cn_name }}</p>
-								<p class="contactPost">{{ element.position }}</p>
-							</div>
+                <div class="contactName">{{ element.cn_name }}</div>
+                <div class="contactPost">{{ element.position }}</div>
+              </div>
+              </van-checkbox>
 						</div>
 					</div>
 				</li>
@@ -247,7 +248,6 @@ export default {
             margin-left 45px
             font-size 35px
             font-weight bold
-            display block 
     .search-wrapper
         display flex
         align-items center
@@ -308,6 +308,17 @@ export default {
               background-color #fff
               .contactAllcheckbox
                 font-size 34px
+                .van-checkbox__label
+                  height 100%
+                  display flex
+                  align-items center
+                  background-color #fff
+            			margin-left 45px
+                  .contactNameAndPost
+                    height 84px
+                    display flex
+                    flex-direction column
+                    justify-content: space-around;
     .footer
       height 98px      
       display flex

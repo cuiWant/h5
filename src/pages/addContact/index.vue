@@ -314,6 +314,7 @@ export default {
     height 84px
     border-radius 10px
     margin-right 27px
+    margin-left 45px
   .contactNameAndPost
     font-size 34px
     .contactName
@@ -333,11 +334,26 @@ export default {
       background-color #fff
       .contactAllcheckbox
 	     	font-size 34px
+		.van-checkbox__label
+			height 100%
+			display flex
+			align-items center
+			background-color #fff
+			margin-left 45px
+			.contactNameAndPost
+				height 84px
+				display flex
+				flex-direction column
+				justify-content: space-around
 </style>
 
 
 <style lang="stylus">
+
 #addContact
+	.van-field__left-icon
+		.van-icon-search
+			// line-height 30px
 	.van-checkbox__icon
 		height auto 
 		line-height normal
@@ -348,7 +364,7 @@ export default {
 			font-size 34px
 			line-height 34px
 		.van-icon
-			line-height 34px
+			line-height 40px
 			font-size 34px
 	.contactSettings
 		.icon-container
@@ -378,4 +394,5 @@ export default {
 	
 	.iconfont
 		font-size 38px
+
 </style>
